@@ -34,8 +34,9 @@ build/
 
 ### Node and npm related ###
 /frontend-config/node_modules
-/frontend-config/node_modules/package-lock.json
-/src/main/resources/static/js/dist
+/src/main/resources/static/js
+/src/main/resources/static/assets
+/src/main/resources/static/css
 /src/main/resources/static/index.html
 
 

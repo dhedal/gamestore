@@ -6,12 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class WebController {
-    private static final Logger LOG = LoggerFactory.getLogger(WebController.class);
+public class SpaController {
+    private static final Logger LOG = LoggerFactory.getLogger(SpaController.class);
 
     @GetMapping(value = "/")
-    public String index() {
-        LOG.debug("### index");
+    public String index(){
         return "forward:index.html";
     }
 }
