@@ -35,7 +35,7 @@ export class HomePage extends PageComponent {
         console.log("## HomePage # ready");
         console.log(this.dataLastGameMap);
         console.log("-----------");
-        this.console.log(this.dataCurrentPromotionMap);
+        console.log(this.dataCurrentPromotionMap);
 
     }
 
