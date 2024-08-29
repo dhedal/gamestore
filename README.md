@@ -54,6 +54,10 @@ mise en production.
   - `setx DB_USERNAME "votre_nom_utilisateur"`
   - `setx DB_PASSWORD "votre_mot_de_passe"`
 
+5. **définir l'url de l'api**:
+- exemple sur window 10, en ligne de commande: 
+    - `setx GS_API_URL "http://localhost:8080/api"`
+
 
 ## Lancement du serveur d'application
 
