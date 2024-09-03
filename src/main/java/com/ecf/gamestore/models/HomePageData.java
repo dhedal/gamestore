@@ -5,30 +5,28 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-public class Promotion implements IEntity {
+public class HomePageData implements IEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Column(updatable = false, nullable = false, unique = true, length = 36)
     private String uuid;
-    @Column(nullable = false)
-    private double discountRate;
-    @Column(nullable = false)
-    private LocalDate startDate;
-    @Column(nullable = false)
-    private LocalDate endDate;
-    @ManyToOne
-    @JoinColumn(name = "game_article_id", nullable = false)
-    private GameArticle gameArticle;
+
+    @OneToMany
+    private List<GameArticle> gamesArticles;
+
+    @OneToMany
+    private List<Promotion> promotions;
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
 
     @Override
     public Long getId() {
@@ -48,36 +46,20 @@ public class Promotion implements IEntity {
         this.uuid = uuid;
     }
 
-    public double getDiscountRate() {
-        return discountRate;
+    public List<GameArticle> getGamesArticles() {
+        return gamesArticles;
     }
 
-    public void setDiscountRate(double discountRate) {
-        this.discountRate = discountRate;
+    public void setGamesArticles(List<GameArticle> gamesArticles) {
+        this.gamesArticles = gamesArticles;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public List<Promotion> getPromotions() {
+        return promotions;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public GameArticle getGameArticle() {
-        return gameArticle;
-    }
-
-    public void setGameArticle(GameArticle gameArticle) {
-        this.gameArticle = gameArticle;
+    public void setPromotions(List<Promotion> promotions) {
+        this.promotions = promotions;
     }
 
     public LocalDateTime getCreatedAt() {

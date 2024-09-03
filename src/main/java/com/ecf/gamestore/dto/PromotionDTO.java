@@ -2,11 +2,12 @@ package com.ecf.gamestore.dto;
 
 import java.time.LocalDate;
 
-public class PromotionDto {
+public class PromotionDTO {
     private String uuid;
     private double discountRate;
     private LocalDate startDate;
     private LocalDate endDate;
+    private GameArticleDTO gameArticle;
 
     public String getUuid() {
         return uuid;
@@ -38,5 +39,13 @@ public class PromotionDto {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public GameArticleDTO getGameArticle() {
+        return gameArticle;
+    }
+
+    public void setGameArticle(GameArticleDTO gameArticle) {
+        this.gameArticle = gameArticle;
     }
 }

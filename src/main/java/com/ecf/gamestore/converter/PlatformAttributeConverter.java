@@ -10,11 +10,11 @@ import java.util.Objects;
 public class PlatformAttributeConverter implements AttributeConverter<Platform, Integer> {
     @Override
     public Integer convertToDatabaseColumn(Platform platform) {
-        return Objects.isNull(platform) ? Platform.NONE.getKey() : platform.getKey();
+        return Objects.isNull(platform) ? Platform.UNDEFINED.getKey() : platform.getKey();
     }
 
     @Override
     public Platform convertToEntityAttribute(Integer key) {
-        return Objects.isNull(key) ? Platform.NONE : Platform.getByKey(key.intValue());
+        return Objects.isNull(key) ? Platform.UNDEFINED : Platform.getByKey(key.intValue());
     }
 }

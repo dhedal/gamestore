@@ -25,11 +25,11 @@ public abstract class AbstractService<R extends JpaRepository, T extends IEntity
             throw new IllegalArgumentException("The entity to be saved cannot be null.");
         }
         else if(Objects.nonNull(entity) && Objects.nonNull(entity.getId())) {
-            entity.setUpdateAt(LocalDateTime.now());
+            entity.setUpdatedAt(LocalDateTime.now());
         }
         else {
             entity.setUuid(UUID.randomUUID().toString());
-            entity.setCreateAt(LocalDateTime.now());
+            entity.setCreatedAt(LocalDateTime.now());
         }
         return (T) this.repository.save(entity);
     }

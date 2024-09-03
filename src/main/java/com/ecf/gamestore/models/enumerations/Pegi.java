@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 @JsonDeserialize(using = PegiDeserializer.class)
 public enum Pegi {
+    UNDEFINED(0, "indéfinie", "pegi indéfinie"),
     PEGI_3(1, "PEGI 3", "Convient à tous les âges. Le contenu ne doit pas inclure de sons ou d'images susceptibles de faire peur aux jeunes enfants. Une légère violence dans un contexte comique est acceptable."),
     PEGI_7(2, "PEGI 7", "Le contenu peut inclure des scènes ou des sons qui pourraient effrayer les jeunes enfants. Les formes légères de violence dans un cadre irréaliste ou de dessin animé sont acceptables."),
     PEGI_12(3, "PEGI 12", "Convient aux enfants de 12 ans et plus. Inclut une violence plus graphique envers des personnages fantastiques et une violence non graphique envers des personnages de type humain."),
@@ -38,7 +39,7 @@ public enum Pegi {
     public static Pegi getByKey(int key) {
         return Stream.of(Pegi.values())
                 .filter(pegi -> pegi.key.intValue() == key)
-                .findFirst().orElse(null);
+                .findFirst().orElse(UNDEFINED);
 
     }
 }

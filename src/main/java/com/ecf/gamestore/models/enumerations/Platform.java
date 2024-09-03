@@ -9,11 +9,11 @@ import java.util.stream.Stream;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 @JsonDeserialize(using = PlatformDeserializer.class)
 public enum Platform {
-    NONE( 1, "none"),
-    PC( 2, "pc"),
-    PS_5(3, "playstation 5"),
-    SWITCH(4, "switch"),
-    XBOX_SERIES(5, "xbox series");
+    UNDEFINED( 0, "indéfinie"),
+    PC( 1, "pc"),
+    PS_5(2, "playstation 5"),
+    SWITCH(3, "switch"),
+    XBOX_SERIES(4, "xbox series");
 
     private Integer key;
     private String label;
@@ -34,6 +34,6 @@ public enum Platform {
     public static Platform getByKey(int key) {
         return Stream.of(Platform.values())
                 .filter(platform -> platform.key.intValue() == key)
-                .findFirst().orElse(null);
+                .findFirst().orElse(UNDEFINED);
     }
 }

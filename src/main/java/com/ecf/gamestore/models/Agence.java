@@ -89,7 +89,7 @@ public class Agence implements IEntity {
     }
 
     @Override
-    public void setCreateAt(LocalDateTime createAt) {
+    public void setCreatedAt(LocalDateTime createAt) {
         this.createAt = createAt;
     }
 
@@ -98,7 +98,7 @@ public class Agence implements IEntity {
     }
 
     @Override
-    public void setUpdateAt(LocalDateTime updateAt) {
+    public void setUpdatedAt(LocalDateTime updateAt) {
         this.updateAt = updateAt;
     }
 }

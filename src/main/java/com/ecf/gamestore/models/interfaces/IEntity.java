@@ -6,6 +6,6 @@ public interface IEntity {
 
     public Long getId();
     public void setUuid(String uuid);
-    public void setCreateAt( LocalDateTime creatAt);
-    public void setUpdateAt( LocalDateTime updateAt);
+    public void setCreatedAt( LocalDateTime creatAt);
+    public void setUpdatedAt( LocalDateTime updateAt);
 }

@@ -22,7 +22,7 @@ public class CommandLine implements IEntity {
     private Command command;
     @ManyToOne(optional = false)
     @JoinColumn(name = "game_video_id", nullable = false)
-    private GameVideo gameVideo;
+    private GameArticle gameVideo;
     @ManyToOne
     @JoinColumn(name = "promotion_id")
     private Promotion promotion;
@@ -62,11 +62,11 @@ public class CommandLine implements IEntity {
         this.command = command;
     }
 
-    public GameVideo getGameVideo() {
+    public GameArticle getGameVideo() {
         return gameVideo;
     }
 
-    public void setGameVideo(GameVideo gameVideo) {
+    public void setGameVideo(GameArticle gameVideo) {
         this.gameVideo = gameVideo;
     }
 
@@ -83,7 +83,7 @@ public class CommandLine implements IEntity {
     }
 
     @Override
-    public void setCreateAt(LocalDateTime createAt) {
+    public void setCreatedAt(LocalDateTime createAt) {
         this.createAt = createAt;
     }
 
@@ -92,7 +92,7 @@ public class CommandLine implements IEntity {
     }
 
     @Override
-    public void setUpdateAt(LocalDateTime updateAt) {
+    public void setUpdatedAt(LocalDateTime updateAt) {
         this.updateAt = updateAt;
     }
 }

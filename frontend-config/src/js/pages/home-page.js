@@ -1,14 +1,17 @@
 import { PageComponent } from "components/page-component.js";
 import { GameService} from "../services/game-service.js";
+import { PageDataService } from "../services/page-data-service.js"
+import {GameTemplate} from "../templates/game-template.js";
 
 export class HomePage extends PageComponent {
     dataLastGameMap;
     dataCurrentPromotionMap;
     lastGamesContainer;
     currentPromotionsContainer;
+    gameTemplate;
 
     constructor() {
-        super("/home", "Accueil", "/html/home.html", ["js/views/home.js"]);
+        super("/home", "Accueil", "/html/home.html", [""]);
     }
 
     async before() {
@@ -17,25 +20,32 @@ export class HomePage extends PageComponent {
         this.dataCurrentPromotionMap = new Map();
 
         await Promise.all([
-            GameService.fetchHomePageData().then(response => {
-                response.lastGames.forEach(game => {
+            PageDataService.fetchHomePageData().then(response => {
+                response.gameArticles.forEach(game => {
                     this.dataLastGameMap.set(game.uuid, game);
                 });
-                response.currentPromotions.forEach(game => {
-                    this.dataCurrentPromotionMap.set(game.uuid, game);
+                response.promotions.forEach(promotion => {
+                    this.dataCurrentPromotionMap.set(promotion.gameArticle.uuid, promotion);
                 });
             })
         ]);
 
         this.lastGamesContainer = document.getElementById("lastGamesContainer");
         this.currentPromotionsContainer = document.getElementById("currentPromotionsContainer");
+        this.gameTemplate = new GameTemplate();
     }
 
     ready() {
         console.log("## HomePage # ready");
-        console.log(this.dataLastGameMap);
-        console.log("-----------");
-        console.log(this.dataCurrentPromotionMap)
+        this.dataLastGameMap.forEach(game => {
+            const clone = this.gameTemplate.clone(game);
+            this.lastGamesContainer.appendChild(clone);
+        });
+
+        this.dataCurrentPromotionMap.forEach(promotion => {
+            const clone = this.gameTemplate.cloneForPromotion(promotion);
+            this.currentPromotionsContainer.appendChild(clone);
+        });
     }
 
 }
