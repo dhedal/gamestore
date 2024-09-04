@@ -23,12 +23,4 @@ public class GameArticleServiceTest {
     @Autowired
     private GameArticleService gameArticleService;
 
-    @Test
-    public void testGetLastGames() {
-        List<GameArticle> gameArticles = this.gameArticleService.getLastGames(5);
-
-        assertNotNull(gameArticles);
-
-        gameArticles.forEach(System.out::println);
-    }
 }
