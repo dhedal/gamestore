@@ -24,12 +24,17 @@ export class PageComponent {
         const html = await fetch(this._pathHtml).then(data => data.text());
         document.getElementById(this._container).innerHTML = html;
 
-        this._pathJS.forEach(js => {
-            const scriptTag = document.createElement("script");
-            scriptTag.setAttribute("type", "module");
-            scriptTag.setAttribute("src", js);
-            document.querySelector("body").appendChild(scriptTag);
-        });
+        if(this._pathJS) {
+            this._pathJS.forEach(js => {
+                if(js != null || js != ""){
+                    const scriptTag = document.createElement("script");
+                    scriptTag.setAttribute("type", "module");
+                    scriptTag.setAttribute("src", js);
+                    document.querySelector("body").appendChild(scriptTag);
+                }
+            });
+        }
+
 
         document.title = this._name + " - " + WEBSITE_NAME;
 

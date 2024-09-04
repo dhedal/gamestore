@@ -1,5 +1,6 @@
 import { Page404 } from "../pages/404-page.js";
 import { HomePage } from "../pages/home-page.js";
+import {GameListPage} from "../pages/game-list-page.js";
 
 export const WEBSITE_NAME = "GameStore";
 
@@ -9,6 +10,7 @@ class Router {
     constructor() {
         this._pages = new Map();
         this._addPage(new HomePage());
+        this._addPage(new GameListPage())
         this._addPage(new Page404());
         this.init();
     }
@@ -27,7 +29,6 @@ class Router {
 
         // Assignation de la fonction routeEvent à la propriété route de la fenêtre
         window.route = (event) => {
-            event = event;
             event.preventDefault();
             window.history.pushState({}, "", event.target.href);
             this.loadPage();
@@ -40,7 +41,6 @@ class Router {
      */
     async loadPage() {
         const page = this.getPage(window.location.pathname);
-        console.log(page);
         await page._init();
         await page._onLoaded();
     }
