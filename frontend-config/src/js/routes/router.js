@@ -1,6 +1,7 @@
 import { Page404 } from "../pages/404-page.js";
 import { HomePage } from "../pages/home-page.js";
 import {GameListPage} from "../pages/game-list-page.js";
+import {cache} from "../config/cache";
 
 export const WEBSITE_NAME = "GameStore";
 
@@ -40,9 +41,11 @@ class Router {
      *
      */
     async loadPage() {
+        await cache.check();
         const page = this.getPage(window.location.pathname);
         await page._init();
         await page._onLoaded();
+
     }
 }
 

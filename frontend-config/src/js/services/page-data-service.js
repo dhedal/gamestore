@@ -6,4 +6,9 @@ export class PageDataService {
         const response = await fetch( `${API_PAGE_DATA_URL}/home_page_data`);
         return await response.json();
     }
+
+    static fetchCacheData = async () => {
+        const response = await fetch( `${API_PAGE_DATA_URL}/cache-data`);
+        return await response.json();
+    }
 }

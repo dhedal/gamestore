@@ -1,4 +1,5 @@
 import { router, WEBSITE_NAME } from "../routes/router.js";
+import {cache} from "../config/cache";
 
 export class PageComponent {
     _container = "main-page";

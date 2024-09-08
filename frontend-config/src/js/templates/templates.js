@@ -46,3 +46,19 @@ export class GameTemplate {
         return clone;
     }
 }
+
+export class GenreTemplate {
+    template;
+    constructor(templateId = "genre-template") {
+        this.template = document.getElementById(templateId);
+    }
+
+    clone(genre) {
+        const clone = this.template.content.cloneNode(true);
+
+        const button = clone.querySelector(".btn");
+        button.setAttribute("data-genre", genre.key);
+        button.textContent = genre.label;
+        return clone;
+    }
+}

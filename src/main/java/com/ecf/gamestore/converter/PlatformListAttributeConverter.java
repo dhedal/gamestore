@@ -19,14 +19,14 @@ public class PlatformListAttributeConverter implements AttributeConverter<List<P
                 platforms.stream()
                         .map(Platform::getKey)
                         .map(String::valueOf)
-                        .collect(Collectors.joining("-"));
+                        .collect(Collectors.joining(","));
     }
 
     @Override
     public List<Platform> convertToEntityAttribute(String s) {
         return Objects.isNull(s) || s.isEmpty() ?
                 List.of() :
-                Stream.of(s.split("-"))
+                Stream.of(s.split(","))
                         .filter(this::checkData)
                         .map(Integer::valueOf)
                         .map(Platform::getByKey)

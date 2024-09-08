@@ -1,7 +1,7 @@
 import { PageComponent } from "components/page-component.js";
 import { GameService} from "../services/game-service.js";
 import { PageDataService } from "../services/page-data-service.js"
-import {GameTemplate} from "../templates/game-template.js";
+import {GameTemplate} from "../templates/templates.js";
 
 export class HomePage extends PageComponent {
     dataLastGameMap;

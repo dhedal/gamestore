@@ -18,14 +18,14 @@ public class GameGenreListAttributeConverter implements AttributeConverter<List<
                 gameGenres.stream()
                         .map(GameGenre::getKey)
                         .map(String::valueOf)
-                        .collect(Collectors.joining("-"));
+                        .collect(Collectors.joining(","));
     }
 
     @Override
     public List<GameGenre> convertToEntityAttribute(String s) {
         return Objects.isNull(s) || s.isEmpty() ?
                 List.of(GameGenre.UNDEFINED) :
-                Stream.of(s.split("-"))
+                Stream.of(s.split(","))
                         .filter(this::checkData)
                         .map(Integer::valueOf)
                         .map(GameGenre::getByKey)
