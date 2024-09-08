@@ -8,7 +8,7 @@ public class HomePageDataDTO {
     private String uuid;
 
     private List<GameArticleDTO> gameArticles = new ArrayList<>();
-    private List<PromotionDTO> promotions = new ArrayList<>();
+    private List<GameArticleDTO> promotions = new ArrayList<>();
 
     public String getUuid() {
         return uuid;
@@ -26,11 +26,11 @@ public class HomePageDataDTO {
         this.gameArticles = gameArticles;
     }
 
-    public List<PromotionDTO> getPromotions() {
+    public List<GameArticleDTO> getPromotions() {
         return promotions;
     }
 
-    public void setPromotions(List<PromotionDTO> promotions) {
+    public void setPromotions(List<GameArticleDTO> promotions) {
         this.promotions = promotions;
     }
 }

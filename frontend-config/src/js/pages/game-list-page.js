@@ -396,19 +396,14 @@ export class GameListPage extends PageComponent {
             event.preventDefault();
             event.stopPropagation();
             GameService.postGamesByFilter(this.gameFilter.get()).then(response => {
-                this.dataGameMap.clear();
-                response.forEach(game => {
-                    this.dataGameMap.set(game.uuid, game);
-                });
+                this.setGameDatas(response);
                 this.fillGameContainer();
             });
         });
 
         await Promise.all([
             GameService.postGamesByFilter(this.gameFilter.get()).then(response => {
-                response.forEach(game => {
-                    this.dataGameMap.set(game.uuid, game);
-                })
+                this.setGameDatas(response);
             })
         ]);
     }
@@ -422,6 +417,13 @@ export class GameListPage extends PageComponent {
         this.dataGameMap.forEach(game => {
             const clone = this.gameTemplate.clone(game);
             this.gamesContainer.appendChild(clone);
+        });
+    }
+
+    setGameDatas(gameDatas){
+        this.dataGameMap.clear();
+        Object.entries(gameDatas).forEach(([key, value]) => {
+            this.dataGameMap.set(key, value);
         });
     }
 }

@@ -6,6 +6,7 @@ export class GameTemplate {
     }
 
     clone(game) {
+        if(game == null) return null;
         const clone = this.template.content.cloneNode(true);
 
         clone.querySelector(".card-bg").src = game.gameInfo.coverUrl;
@@ -29,21 +30,20 @@ export class GameTemplate {
             }
         });
 
+        if(game.promotion != null) this.clonePromotion(clone, game.promotion);
+
         return clone;
     }
 
-    cloneForPromotion(promotion) {
-        const game = promotion.gameArticle;
-        const clone = this.clone(promotion.gameArticle);
+    clonePromotion(clone, promotion) {
+        if(clone == null || promotion == null);
 
         clone.querySelector(".price").classList.add("text-decoration-line-through");
 
         let promoElt = document.createElement("span");
         promoElt.classList.add("position-absolute", "bottom-0", "end-0", "badge", "text-bg-warning", "fs-6", "fw-bolder", "me-3", "mb-1", "text-white");
-        promoElt.textContent = 20 + "%";
+        promoElt.textContent = promotion.discountRate + "%";
         clone.querySelector(".picture").appendChild(promoElt);
-
-        return clone;
     }
 }
 

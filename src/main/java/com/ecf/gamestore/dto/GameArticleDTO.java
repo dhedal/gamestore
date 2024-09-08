@@ -8,6 +8,7 @@ public class GameArticleDTO {
     private double stock = 0d;
     private Platform platform;
     private GameInfoDTO gameInfo;
+    private PromotionDTO promotion;
 
 
     public String getUuid() {
@@ -50,6 +51,14 @@ public class GameArticleDTO {
         this.gameInfo = gameInfo;
     }
 
+    public PromotionDTO getPromotion() {
+        return promotion;
+    }
+
+    public void setPromotion(PromotionDTO promotion) {
+        this.promotion = promotion;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("GameArticleDTO{");
@@ -58,6 +67,7 @@ public class GameArticleDTO {
         sb.append(", stock=").append(stock);
         sb.append(", platform=").append(platform);
         sb.append(", gameInfo=").append(gameInfo);
+        sb.append(", promotion=").append(promotion);
         sb.append('}');
         return sb.toString();
     }

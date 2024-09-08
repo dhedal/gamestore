@@ -59,4 +59,17 @@ public class GameFilterDTO {
     public void setLimit(Integer limit) {
         this.limit = limit;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("GameFilterDTO{");
+        sb.append("platformKey=").append(platformKey);
+        sb.append(", genreKeys=").append(genreKeys);
+        sb.append(", priceMin=").append(priceMin);
+        sb.append(", priceMax=").append(priceMax);
+        sb.append(", page=").append(page);
+        sb.append(", limit=").append(limit);
+        sb.append('}');
+        return sb.toString();
+    }
 }

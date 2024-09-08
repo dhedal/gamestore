@@ -24,8 +24,8 @@ export class HomePage extends PageComponent {
                 response.gameArticles.forEach(game => {
                     this.dataLastGameMap.set(game.uuid, game);
                 });
-                response.promotions.forEach(promotion => {
-                    this.dataCurrentPromotionMap.set(promotion.gameArticle.uuid, promotion);
+                response.promotions.forEach(game => {
+                    this.dataCurrentPromotionMap.set(game.uuid, game);
                 });
             })
         ]);
@@ -42,9 +42,9 @@ export class HomePage extends PageComponent {
             this.lastGamesContainer.appendChild(clone);
         });
 
-        this.dataCurrentPromotionMap.forEach(promotion => {
-            const clone = this.gameTemplate.cloneForPromotion(promotion);
-            this.currentPromotionsContainer.appendChild(clone);
+        this.dataCurrentPromotionMap.forEach(game => {
+            const clone = this.gameTemplate.clone(game);
+            if(clone) this.currentPromotionsContainer.appendChild(clone);
         });
     }
 

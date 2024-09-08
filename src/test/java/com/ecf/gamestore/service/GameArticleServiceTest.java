@@ -26,6 +26,24 @@ public class GameArticleServiceTest {
     private GameArticleService gameArticleService;
 
 
+//    @Test
+//    public void findByPlatformAndGenres_defaultTest() {
+//        Platform platform = Platform.PC;
+//        List<GameGenre> genres = List.of();
+//        List<GameArticle> gameArticles = this.gameArticleService.getGameArticles(
+//                platform, genres, Double.valueOf(0), Double.valueOf(100), 0, 9);
+//        assertNotNull(gameArticles);
+//        assertFalse(gameArticles.isEmpty());
+//
+//        gameArticles.forEach(System.out::println);
+//
+//        List<Long> ids = List.of(9L, 26L, 29L);
+//        int count = (int) gameArticles.stream()
+//                .filter(gameArticle -> {
+//                    return Objects.equals(platform, gameArticle.getPlatform()) && ids.contains(gameArticle.getId());
+//                }).count();
+//        assertEquals(ids.size(), count);
+//    }
     @Test
     public void findByPlatformAndGenresTest() {
         Platform platform = Platform.XBOX_SERIES;

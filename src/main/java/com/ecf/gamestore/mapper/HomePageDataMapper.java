@@ -12,7 +12,7 @@ public class HomePageDataMapper {
         if(Objects.nonNull(homePageData)) {
             dto.setUuid(homePageData.getUuid());
             dto.setGameArticles(GameArticleMapper.toDTOs(homePageData.getGamesArticles()));
-            dto.setPromotions(PromotionMapper.toDTOs(homePageData.getPromotions()));
+            dto.setPromotions(GameArticleMapper.promotionsToGameArticles(homePageData.getPromotions()));
         }
 
         return dto;
