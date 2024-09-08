@@ -39,6 +39,21 @@ public class GameArticleService extends AbstractService<GameArticleRepository, G
         this.promotionService = promotionService;
     }
 
+
+    /**
+     *
+     * @param platform
+     * @param genres
+     * @param page
+     * @param limit
+     * @return
+     * @throws IllegalArgumentException
+     */
+    public List<GameArticle> getGameArticles(Platform platform, List<GameGenre> genres, Integer page, Integer limit) throws IllegalArgumentException{
+        return this.getGameArticles(
+                platform, genres, Double.valueOf(0), Double.valueOf(100), page, limit);
+    }
+
     /**
      * Les paramètres sont des filtres de recherche sur une platform.<br>
      * Si genres est null ou empty
@@ -50,22 +65,30 @@ public class GameArticleService extends AbstractService<GameArticleRepository, G
      * @param limit Integer
      * @return
      */
-    public List<GameArticle> getGameArticles(Platform platform, List<GameGenre> genres, Double priceMin, Double priceMax, Integer page, Integer limit) {
-        LOG.debug("## getGameArticles(Platform platform, List<GameGenre> genres, Integer page, Integer limit)");
+    public List<GameArticle> getGameArticles(Platform platform, List<GameGenre> genres, Double priceMin, Double priceMax, Integer page, Integer limit) throws IllegalArgumentException{
+        LOG.debug("## getGameArticles(Platform platform, List<GameGenre> genres, Double priceMin, Double priceMax, Integer page, Integer limit)");
 
-        if(ObjectUtils.isNulls(platform, page, limit) ||
-                page.intValue() < 0 || limit.intValue() <= 0) return List.of();
+        if(ObjectUtils.isNulls(platform, page, limit) || Objects.equals(Platform.UNDEFINED, platform) ||
+                page.intValue() < 0 || limit.intValue() <= 0) throw new IllegalArgumentException("Arguments invalids");
+
+
+        if(Objects.isNull(priceMin)) priceMin = Double.valueOf(0);
+        if(Objects.isNull(priceMax)) priceMax = Double.valueOf(100);
+        if(priceMin.doubleValue() > priceMax.doubleValue()) priceMin = priceMax;
 
         if(CollectionUtils.isNullOrEmpty(genres))
-            return this.repository.findByPlatform(platform, PageRequest.of(page, limit));
+            return this.repository.findByPlatformAndPriceBetween(platform, priceMin, priceMax, PageRequest.of(page, limit));
 
         List<GameInfo> gameInfos = this.gameInfoService.findByPlatformAndGenres(platform, genres);
         if(CollectionUtils.isNullOrEmpty(gameInfos)) return List.of();
 
-        return this.repository.findByPlatformAndGameInfoIn(platform, gameInfos, PageRequest.of(page, limit));
+        return this.repository.findByPlatformAndGameInfosAndPriceBetween(platform, gameInfos, priceMin, priceMax, PageRequest.of(page, limit));
     }
 
-
+    /**
+     *
+     * @return
+     */
     public Map<Platform, Long> countGameArticleByPlatforms() {
         LOG.debug("## countGameArticleByPlatforms()");
         List<Object[]> results = this.repository.countGameArticleByPlatforms(Platform.values());

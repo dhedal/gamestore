@@ -1,12 +1,8 @@
-package com.ecf.gamestore.services;
+package com.ecf.gamestore.service;
 
-import com.ecf.gamestore.dto.GameArticleDTO;
-import com.ecf.gamestore.mapper.GameArticleMapper;
 import com.ecf.gamestore.models.GameArticle;
-import com.ecf.gamestore.models.GameInfo;
 import com.ecf.gamestore.models.enumerations.GameGenre;
 import com.ecf.gamestore.models.enumerations.Platform;
-import com.ecf.gamestore.service.GameArticleService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -17,8 +17,24 @@ import java.util.Map;
 @Repository
 public interface GameArticleRepository extends JpaRepository<GameArticle, Long> {
     public GameArticle findByUuid(String uuid);
-    public List<GameArticle> findByPlatform(Platform platform, Pageable pageable);
-    public List<GameArticle> findByPlatformAndGameInfoIn(Platform platform, List<GameInfo> gameInfos, Pageable pageable);
+    @Query("""
+    SELECT ga FROM GameArticle ga 
+    WHERE ga.stock > 0 
+    AND ga.platform = :platform 
+    AND ga.price BETWEEN :priceMin AND :priceMax 
+    ORDER BY ga.createdAt DESC
+    """)
+    public List<GameArticle> findByPlatformAndPriceBetween(Platform platform, Double priceMin, Double priceMax, Pageable pageable);
+
+    @Query("""
+    SELECT ga FROM GameArticle ga 
+    WHERE ga.stock > 0 
+    AND ga.platform = :platform 
+    AND ga.gameInfo IN (:gameInfos) 
+    AND ga.price BETWEEN :priceMin AND :priceMax
+    ORDER BY ga.createdAt DESC
+    """)
+    public List<GameArticle> findByPlatformAndGameInfosAndPriceBetween(Platform platform, List<GameInfo> gameInfos,  Double priceMin, Double priceMax,Pageable pageable);
 
     @Query("SELECT ga.platform, COUNT(ga) FROM GameArticle ga GROUP BY ga.platform")
     public List<Object[]> countGameArticleByPlatforms(Platform [] platforms);

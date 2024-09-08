@@ -45,6 +45,8 @@ class PriceSlider {
         });
 
         this.resetPricesBtn.addEventListener("click", event => {
+            event.preventDefault();
+            event.stopPropagation()
             this.reset();
         });
 
@@ -296,7 +298,6 @@ class GameFilter {
     genreContainer;
     priceSlider;
     pagination;
-    submitFilterBtn;
 
     constructor(platform) {
         this.platform = platform;
@@ -307,7 +308,7 @@ class GameFilter {
         this.priceSlider = new PriceSlider();
         this.pagination = new Pagination();
         this.pagination.init(this.platform);
-        this.submitFilterBtn = document.getElementById("filter-submit-btn");
+
 
         this.init();
     }
@@ -337,11 +338,6 @@ class GameFilter {
             });
         });
 
-        this.submitFilterBtn.addEventListener("click", event => {
-            event.preventDefault();
-            event.stopPropagation();
-           console.log(this.get());
-        });
     }
 
     get() {
@@ -376,17 +372,15 @@ export class GameListPage extends PageComponent {
     gamesContainer;
     gameTemplate;
     platformName;
-    filter;
+    gameFilter;
     pagination;
-
-
+    submitFilterBtn
 
     constructor() {
         super("/game-list", "Listes", "/html/game-list.html", [""]);
     }
 
     async before() {
-        console.log("## gameList # before");
         this.dataGameMap = new Map();
         this.gamesContainer = document.getElementById("gamesContainer");
         this.gameTemplate = new GameTemplate();
@@ -395,11 +389,23 @@ export class GameListPage extends PageComponent {
         this.platformName = document.getElementById("platformName");
         this.platformName.textContent = platform.label;
 
-        this.filter = new GameFilter(platform);
+        this.gameFilter = new GameFilter(platform);
 
+        this.submitFilterBtn = document.getElementById("filter-submit-btn");
+        this.submitFilterBtn.addEventListener("click", event => {
+            event.preventDefault();
+            event.stopPropagation();
+            GameService.postGamesByFilter(this.gameFilter.get()).then(response => {
+                this.dataGameMap.clear();
+                response.forEach(game => {
+                    this.dataGameMap.set(game.uuid, game);
+                });
+                this.fillGameContainer();
+            });
+        });
 
         await Promise.all([
-            GameService.postGamesByFilter(this.filter.get()).then(response => {
+            GameService.postGamesByFilter(this.gameFilter.get()).then(response => {
                 response.forEach(game => {
                     this.dataGameMap.set(game.uuid, game);
                 })
@@ -408,7 +414,11 @@ export class GameListPage extends PageComponent {
     }
 
     ready() {
-        console.log("## gameList # ready");
+        this.fillGameContainer();
+    }
+
+    fillGameContainer() {
+        this.gamesContainer.innerHTML = "";
         this.dataGameMap.forEach(game => {
             const clone = this.gameTemplate.clone(game);
             this.gamesContainer.appendChild(clone);

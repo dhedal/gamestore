@@ -1,9 +1,8 @@
-package com.ecf.gamestore.services;
+package com.ecf.gamestore.service;
 
 import com.ecf.gamestore.models.GameInfo;
 import com.ecf.gamestore.models.enumerations.GameGenre;
 import com.ecf.gamestore.models.enumerations.Platform;
-import com.ecf.gamestore.service.GameInfoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
