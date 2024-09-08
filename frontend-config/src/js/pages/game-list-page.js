@@ -417,6 +417,9 @@ export class GameListPage extends PageComponent {
         this.dataGameMap.forEach(game => {
             const clone = this.gameTemplate.clone(game);
             this.gamesContainer.appendChild(clone);
+            clone.addEventListener("click", event => {
+                console.log(clone);
+            })
         });
     }
 

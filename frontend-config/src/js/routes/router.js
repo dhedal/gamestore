@@ -2,6 +2,7 @@ import { Page404 } from "../pages/404-page.js";
 import { HomePage } from "../pages/home-page.js";
 import {GameListPage} from "../pages/game-list-page.js";
 import {cache} from "../config/cache";
+import {GameDetailPage} from "../pages/game-detail-page.js";
 
 export const WEBSITE_NAME = "GameStore";
 
@@ -11,7 +12,8 @@ class Router {
     constructor() {
         this._pages = new Map();
         this._addPage(new HomePage());
-        this._addPage(new GameListPage())
+        this._addPage(new GameListPage());
+        this._addPage(new GameDetailPage());
         this._addPage(new Page404());
         this.init();
     }

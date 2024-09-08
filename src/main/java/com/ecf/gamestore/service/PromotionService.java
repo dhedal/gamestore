@@ -8,7 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PromotionService extends AbstractService<PromotionRepository, Promotion>{
@@ -18,11 +20,17 @@ public class PromotionService extends AbstractService<PromotionRepository, Promo
         super(repository);
     }
 
+    /**
+     *
+     * @param gameArticles
+     * @return
+     */
     public List<Promotion> getPromotions(List<GameArticle> gameArticles) {
         LOG.debug("## getPromotions(List<GameArticle> gameArticles)");
 
         if(CollectionUtils.isNullOrEmpty(gameArticles)) return List.of();
 
-        return this.repository.findByGameArticleIn(gameArticles);
+        return this.repository.findByGameArticleInAndStartDateAfterAndEndDateBefore(gameArticles, LocalDate.now(), LocalDate.now());
     }
+
 }

@@ -9,18 +9,20 @@ import java.util.stream.Stream;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 @JsonDeserialize(using = PlatformDeserializer.class)
 public enum Platform {
-    UNDEFINED( 0, "indéfinie"),
-    PC( 1, "pc"),
-    PS_5(2, "playstation 5"),
-    SWITCH(3, "switch"),
-    XBOX_SERIES(4, "xbox series");
+    UNDEFINED( 0, "indéfinie", ""),
+    PC( 1, "pc", "assets/icons/icon-pc.svg"),
+    PS_5(2, "playstation 5", "assets/icons/icon-playstation.svg"),
+    SWITCH(3, "switch", "assets/icons/icon-nitendo.svg"),
+    XBOX_SERIES(4, "xbox series", "assets/icons/icon-xbox.svg");
 
     private Integer key;
     private String label;
+    private String icon;
 
-    Platform(Integer key, String label) {
+    Platform(Integer key, String label, String icon) {
         this.key = key;
         this.label = label;
+        this.icon = icon;
     }
 
     public Integer getKey() {
@@ -29,6 +31,10 @@ public enum Platform {
 
     public String getLabel() {
         return label;
+    }
+
+    public String getIcon() {
+        return icon;
     }
 
     public static Platform getByKey(int key) {

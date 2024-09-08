@@ -6,8 +6,10 @@ class Cache {
     genreMap = null;
     gameArticleLimit
     gameCountMap = null;
-    constructor(limitDefault = 10) {
+    dataTempMap;
+    constructor(limitDefault = 9) {
         this.gameArticleLimit = limitDefault;
+        this.dataTempMap = new Map();
     }
 
     getCount(platform){
@@ -15,13 +17,21 @@ class Cache {
         return this.gameCountMap.get(platform.key);
     }
 
+    consumeDataTemp(key) {
+        const value =  this.dataTempMap.get(key);
+        if(value) this.dataTempMap.delete(key);
+        return value;
+    }
+
+    saveDataTemp(key, value) {
+        if(key != null && value != null) this.dataTempMap.set(key, value);
+    }
+
     async init() {
         this.platformMap = new Map();
         this.genreMap = new Map();
         this.gameCountMap = new Map();
         await PageDataService.fetchCacheData().then(datas => {
-            console.log(datas);
-
             Object.entries(datas.gameCountMap).forEach(([key, value]) => {
                 this.gameCountMap.set(parseInt(key), value);
             });

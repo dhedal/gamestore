@@ -7,7 +7,6 @@ import com.ecf.gamestore.models.enumerations.Platform;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 
@@ -17,6 +16,7 @@ import java.util.Map;
 @Repository
 public interface GameArticleRepository extends JpaRepository<GameArticle, Long> {
     public GameArticle findByUuid(String uuid);
+    public List<GameArticle> findByGameInfo(GameInfo gameInfo);
     @Query("""
     SELECT ga FROM GameArticle ga 
     WHERE ga.stock > 0 

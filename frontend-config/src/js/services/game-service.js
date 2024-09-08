@@ -12,4 +12,10 @@ export class GameService {
         const response = await fetch(`${API_GAME_URL}/filter`, header);
         return await response.json();
     }
+
+    static fetchGameByInfo = async (gameInfoUuid) => {
+        const response = await fetch(`${API_GAME_URL}/info/${gameInfoUuid}`);
+        return await response.json();
+
+    };
 }

@@ -70,7 +70,7 @@ public class GameArticleMapper {
                 }
             });
         }
-        
+
         return dtoMap;
     }
 

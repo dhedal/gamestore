@@ -1,3 +1,5 @@
+import {cache} from "../config/cache.js";
+
 export class GameTemplate {
     template;
     constructor(templateId = "game-template") {
@@ -26,7 +28,7 @@ export class GameTemplate {
                 gameContainer.dispatchEvent(customEvent);
             }
             else {
-                window.location.href = `/game-detail?uuid=${game.uuid}`;
+                window.location.href = `/game-detail?game=${game.uuid}&info=${game.gameInfo.uuid}`;
             }
         });
 

@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Lazy;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,19 @@ public class GameArticleService extends AbstractService<GameArticleRepository, G
         super(repository);
         this.gameInfoService = gameInfoService;
         this.promotionService = promotionService;
+    }
+
+    /**
+     *
+     * @param gameInfoUuid
+     * @return
+     */
+    public List<GameArticle> getByGameInfoUuid(String gameInfoUuid) {
+        LOG.debug("## getByUuid(String uuid)");
+        if(!StringUtils.hasText(gameInfoUuid)) return List.of();
+        GameInfo gameInfo = this.gameInfoService.findByUuid(gameInfoUuid);
+        if(Objects.isNull(gameInfo)) return null;
+        return this.repository.findByGameInfo(gameInfo);
     }
 
 

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -33,5 +34,11 @@ public class GameInfoService extends AbstractService<GameInfoRepository, GameInf
             return this.repository.findByPlatformAndGenresDynamic(platform, genres);
         }
         return List.of();
+    }
+
+    public GameInfo findByUuid(String gameInfoUuid) {
+        LOG.debug("## findByUuid(String gameInfoUuid)");
+        if(!StringUtils.hasText(gameInfoUuid)) return null;
+        return this.repository.findByUuid(gameInfoUuid);
     }
 }
