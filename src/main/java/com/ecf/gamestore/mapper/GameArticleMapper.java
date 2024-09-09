@@ -27,10 +27,10 @@ public class GameArticleMapper {
     public static GameArticleDTO toDTO(Promotion promotion) {
         if(Objects.isNull(promotion)) return null;
         PromotionDTO promotionDTO = PromotionMapper.toDTO(promotion);
-
+        System.out.println(promotionDTO);
         GameArticleDTO dto = promotionDTO.getGameArticle();
         dto.setPromotion(promotionDTO);
-        promotionDTO.setGameArticle(null);
+        dto.getPromotion().setGameArticle(null);
         return dto;
     }
 

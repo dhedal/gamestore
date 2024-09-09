@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class PromotionService extends AbstractService<PromotionRepository, Promotion>{
@@ -30,7 +29,7 @@ public class PromotionService extends AbstractService<PromotionRepository, Promo
 
         if(CollectionUtils.isNullOrEmpty(gameArticles)) return List.of();
 
-        return this.repository.findByGameArticleInAndStartDateAfterAndEndDateBefore(gameArticles, LocalDate.now(), LocalDate.now());
+        return this.repository.findByGameArticlesAndDate(gameArticles, LocalDate.now());
     }
 
 }

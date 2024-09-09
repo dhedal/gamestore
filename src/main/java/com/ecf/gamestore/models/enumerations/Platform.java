@@ -4,6 +4,9 @@ import com.ecf.gamestore.util.PlatformDeserializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
@@ -41,5 +44,11 @@ public enum Platform {
         return Stream.of(Platform.values())
                 .filter(platform -> platform.key.intValue() == key)
                 .findFirst().orElse(UNDEFINED);
+    }
+
+    public static List<Platform> list() {
+        return Stream.of(Platform.values())
+                .filter(platform -> !Objects.equals(UNDEFINED, platform))
+                .collect(Collectors.toList());
     }
 }

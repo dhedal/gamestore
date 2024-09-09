@@ -4,6 +4,9 @@ import com.ecf.gamestore.util.GameGenreDeserializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
@@ -60,5 +63,11 @@ public enum GameGenre {
         return Stream.of(GameGenre.values())
                 .filter(gameGenre -> gameGenre.getKey().intValue() == key)
                 .findFirst().orElse(UNDEFINED);
+    }
+
+    public static List<GameGenre> list() {
+        return Stream.of(GameGenre.values())
+                .filter(genre -> !Objects.equals(UNDEFINED, genre))
+                .collect(Collectors.toList());
     }
 }

@@ -8,6 +8,8 @@ import com.ecf.gamestore.service.GameArticleServiceTest;
 import com.ecf.gamestore.service.GameInfoService;
 import com.ecf.gamestore.utils.CollectionUtils;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("test")
 public class GameArticleRepositoryTest {
+    private static final Logger LOG = LoggerFactory.getLogger(GameArticleRepositoryTest.class);
 
     @Autowired
     private GameArticleRepository gameArticleRepository;

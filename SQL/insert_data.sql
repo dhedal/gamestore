@@ -53,10 +53,10 @@ insert into home_page_data_games_articles (games_articles_id, home_page_data_id)
 (1, 1), (4, 1), (15, 1), (23, 1), (28, 1);
 
 insert into promotion (id, uuid, game_article_id, discount_rate, start_date, end_date, created_at) values
-(1, uuid(), 19, 20, '2024-09-02 07:48:14', '2024-11-03 07:48:14', now()),
-(2, uuid(), 25, 30, '2024-09-02 07:48:14', '2024-11-03 07:48:14', now()),
-(3, uuid(), 9, 15, '2024-09-02 07:48:14', '2024-11-03 07:48:14', now()),
-(4, uuid(), 7, 5, '2024-09-02 07:48:14', '2024-11-03 07:48:14', now());
+(1, uuid(), 19, 20, DATE(NOW() - INTERVAL 1 DAY), DATE(NOW() + INTERVAL 60 DAY), NOW()),
+(2, uuid(), 25, 30, DATE(NOW() - INTERVAL 1 DAY), DATE(NOW() + INTERVAL 60 DAY), NOW()),
+(3, uuid(), 9, 15, DATE(NOW() - INTERVAL 1 DAY), DATE(NOW() + INTERVAL 60 DAY), NOW()),
+(4, uuid(), 7, 5, DATE(NOW() - INTERVAL 1 DAY), DATE(NOW() + INTERVAL 60 DAY), NOW());
 
 insert into home_page_data_promotions (home_page_data_id, promotions_id) values
 (1, 1), (1, 2), (1, 3), (1, 4);
