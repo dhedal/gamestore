@@ -11,7 +11,6 @@ export class GameDetailPage extends PageComponent{
     }
 
     async before() {
-        console.log("##GameDetailPage #before");
         this.gameMap = new Map();
         this.platformTagMap = new Map();
 
@@ -21,7 +20,6 @@ export class GameDetailPage extends PageComponent{
             Object.entries(response).forEach(([uuid, game]) => {
                 this.gameMap.set(uuid, game);
             });
-            console.log(this.gameMap);
             this.game = null;
         });
 
@@ -30,12 +28,10 @@ export class GameDetailPage extends PageComponent{
     }
 
     ready() {
-        console.log("##GameDetailPage #ready");
         this.fill(this.gameMap.get(this.param.get("game")));
     }
 
     fill(game) {
-        console.log(game);
         if(game == null || game.gameInfo == null) return;
 
         this.fillGameInfo(game.gameInfo);
@@ -47,17 +43,31 @@ export class GameDetailPage extends PageComponent{
     }
 
     fillGameInfo(gameInfo) {
-        if(gameInfo == null) return;
+        if (gameInfo == null) return;
         const gameCover = document.getElementById("game-cover");
-        gameCover.src= gameInfo.coverUrl ? gameInfo.coverUrl : "/assets/images/empty.bmp";
+        gameCover.src = gameInfo.coverUrl ? gameInfo.coverUrl : "/assets/images/empty.bmp";
 
 
         const title = document.getElementById("game-title");
         title.textContent = gameInfo.title;
 
+        const pegi = document.getElementById("game-pegi");
+        pegi.textContent = gameInfo.pegi.label;
+
         this.createPlatformsTag(gameInfo);
 
         document.getElementById("game-description").textContent = gameInfo.summary;
+
+        if (gameInfo.genres) {
+            const gameGenres = document.getElementById("game-genres");
+            gameGenres.innerHTML = "";
+            gameInfo.genres.forEach((genre) => {
+                const span = document.createElement("span");
+                span.classList.add("badge", "bg-primary", "me-2", "mb-2");
+                span.textContent = genre.label;
+                gameGenres.appendChild(span);
+            });
+        }
     }
 
 
@@ -67,12 +77,15 @@ export class GameDetailPage extends PageComponent{
         const platforms = document.getElementById("game-platforms");
         platforms.innerHTML = "";
         gameInfo.platforms.forEach(platform => {
-            const tag = this.platformTag(platform);
-            if(tag) {
-                platforms.appendChild(tag);
-                this.platformTagMap.set(platform.key, tag);
+            const span = this.platformTag(platform);
+            if(span) {
+                const div = document.createElement("div");
+                div.classList.add("col-auto", "mb-2");
+                div.appendChild(span);
+                platforms.appendChild(div);
+                this.platformTagMap.set(platform.key, span);
 
-                tag.addEventListener("click", event => {
+                span.addEventListener("click", event => {
                     const game = Array.from(this.gameMap)
                         .find(([uuid, game]) => game.platform.key === platform.key)?.[1];
                     if(game) this.fillPlatformGameVersion(game);
@@ -99,7 +112,7 @@ export class GameDetailPage extends PageComponent{
         const gamePrice = document.getElementById("game-price");
         gamePrice.innerHTML = "";
         gamePrice.classList.remove("text-decoration-line-through");
-        gamePrice.textContent = game.price + "€";
+
 
         const gamePromoPurcent =  document.getElementById("game-promo-purcent");
         gamePromoPurcent.innerHTML = "";
@@ -107,17 +120,27 @@ export class GameDetailPage extends PageComponent{
         const gamePromoPrice =  document.getElementById("game-promo-price");
         gamePromoPrice.innerHTML = "";
 
+        const gameStock = document.getElementById("game-stock");
+        gameStock.innerHTML = "";
 
+        if(game.stock > 0) {
+            gamePrice.textContent = game.price + "€";
+            gameStock.appendChild(this.spanText("En stock", ["text-success"]));
+            if(game.promotion) {
+                gamePrice.classList.add("text-decoration-line-through", "text-secondary");
 
-        if(game.promotion) {
-            gamePrice.classList.add("text-decoration-line-through", "text-secondary");
+                const gamePromoPurcent =  document.getElementById("game-promo-purcent");
+                gamePromoPurcent.textContent = "-" + game.promotion.discountRate + "%";
 
-            const gamePromoPurcent =  document.getElementById("game-promo-purcent");
-            gamePromoPurcent.textContent = "-" + game.promotion.discountRate + "%";
-
-            const gamePromoPrice =  document.getElementById("game-promo-price");
-            gamePromoPrice.textContent = this.calculatePromotion(game) + "€";
+                const gamePromoPrice =  document.getElementById("game-promo-price");
+                gamePromoPrice.textContent = this.calculatePromotion(game) + "€";
+            }
         }
+        else {
+            gameStock.appendChild(this.spanText("Rupture de stock", ["text-danger"]));
+        }
+
+
 
         this.activeGame(game);
 
@@ -145,5 +168,12 @@ export class GameDetailPage extends PageComponent{
         if(game == null || game.promotion == null) return -0.00;
         const promo = (game.price * game.promotion.discountRate) / 100;
         return (game.price - promo).toFixed(2);
+    }
+
+    spanText(text, classArray = []){
+        const span = document.createElement("span");
+        span.classList.add(...classArray);
+        span.textContent = text;
+        return span;
     }
 }

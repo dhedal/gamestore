@@ -1,18 +1,26 @@
 <div class="container">
     <div class="row">
-        <div class="col-6">
+        <div class="col-lg-6 col-sm-12">
             <img id="game-cover" src="" alt="empty">
         </div>
 
-        <div class="col-6">
+        <div class="col-lg-6 col-sm-12">
             <h3 id="game-title" class="col-12 mb-4">title</h3>
-            <div id="game-platforms" class="w-50 col-12 d-flex flex-wrap align-items-center justify-content-center justify-content-md-between mb-4"></div>
-            <div class="w-50 col-12 d-flex flex-wrap align-items-center justify-content-center justify-content-md-between mb-4">
-                <span id="game-price" class="col-4 fs-5"></span>
-                <span id="game-promo-purcent" class="col-4 fs-5 text-danger"></span>
-                <span id="game-promo-price" class="col-4 fs-3"></span>
+            <div class="col-12">
+                <span id="game-pegi" class="badge bg-primary me-2 mb-2"></span>
             </div>
-            <div class="col-12  mb-4">
+            <div id="game-platforms" class="row mb-4"></div>
+            <div class="w-50 col-12 d-flex flex-wrap align-items-center justify-content-start mb-4">
+                <div class="row">
+                    <span id="game-price" class="col-lg-4 col-md-4 fs-5 align-self-end"></span>
+                    <span id="game-promo-purcent" class="col-lg-4 col-md-4 fs-5 text-danger align-self-end"></span>
+                    <span id="game-promo-price" class="col-lg-4 col-md-4 fs-3"></span>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb-4">
+                <label id="game-stock"></label>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb-4">
                 <button id="addCartBtn" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#cartModal">
                     <i class="bi bi-cart4"></i>
                     Ajouter au panier
@@ -20,9 +28,13 @@
             </div>
         </div>
 
-        <div class="col-6">
-            <h1>À propos</h1>
+        <div class="col-lg-6 col-sm-12">
+            <span class="w-100 fs-4">À propos:</span>
             <p id="game-description"></p>
+        </div>
+        <div class="col-lg-6 col-sm-12">
+            <span class="w-100 fs-4">Genres:</span>
+            <div id="game-genres" class="d-flex flex-wrap"></div>
         </div>
     </div>
 
