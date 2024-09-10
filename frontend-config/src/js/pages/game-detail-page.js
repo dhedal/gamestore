@@ -5,6 +5,7 @@ export class GameDetailPage extends PageComponent{
     gameMap;
     platformTagMap;
     game;
+    addCartBtn;
 
     constructor() {
         super("/game-detail", "Game detail", "/html/game-detail.html", []);
@@ -23,7 +24,7 @@ export class GameDetailPage extends PageComponent{
             this.game = null;
         });
 
-
+        this.addCartBtn = document.getElementById("addCartBtn");
 
     }
 
@@ -125,7 +126,10 @@ export class GameDetailPage extends PageComponent{
 
         if(game.stock > 0) {
             gamePrice.textContent = game.price + "€";
+
             gameStock.appendChild(this.spanText("En stock", ["text-success"]));
+            this.addCartBtn.classList.remove("visually-hidden");
+
             if(game.promotion) {
                 gamePrice.classList.add("text-decoration-line-through", "text-secondary");
 
@@ -135,12 +139,13 @@ export class GameDetailPage extends PageComponent{
                 const gamePromoPrice =  document.getElementById("game-promo-price");
                 gamePromoPrice.textContent = this.calculatePromotion(game) + "€";
             }
+
         }
         else {
             gameStock.appendChild(this.spanText("Rupture de stock", ["text-danger"]));
+            this.addCartBtn.classList.add("visually-hidden");
         }
-
-
+        
 
         this.activeGame(game);
 
