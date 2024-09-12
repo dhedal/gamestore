@@ -1,5 +1,6 @@
 import { router, WEBSITE_NAME } from "../routes/router.js";
 import {cache} from "../config/cache";
+import {appContext} from "../config/app-context.js";
 
 export class PageComponent {
     _container = "main-page";
@@ -14,6 +15,7 @@ export class PageComponent {
         this._name = name;
         this._pathHtml = pathHtml;
         this._pathJS = pathJs;
+        appContext.currentPage = this;
     }
 
     get url() { return this._url;}
@@ -57,4 +59,6 @@ export class PageComponent {
     async ready() {}
 
     async error(exception) { console.log(exception);}
+
+    async refresh(){}
 }

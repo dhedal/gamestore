@@ -3,6 +3,7 @@ import {GameTemplate, GenreTemplate} from "../templates/templates.js";
 import {GameService} from "../services/game-service.js";
 import {cache} from "../config/cache.js";
 import noUiSlider from "nouislider";
+import {CartModal} from "../modals/modal.js";
 
 
 class PriceSlider {
@@ -371,6 +372,7 @@ export class GameListPage extends PageComponent {
     dataGameMap;
     gamesContainer;
     gameTemplate;
+    cartModal;
     platformName;
     gameFilter;
     pagination;
@@ -384,6 +386,7 @@ export class GameListPage extends PageComponent {
         this.dataGameMap = new Map();
         this.gamesContainer = document.getElementById("gamesContainer");
         this.gameTemplate = new GameTemplate();
+        this.cartModal = new CartModal();
 
         const platform = cache.platformMap.get(parseInt(this.param.get("pkey")));
         this.platformName = document.getElementById("platformName");
@@ -397,7 +400,7 @@ export class GameListPage extends PageComponent {
             event.stopPropagation();
             GameService.postGamesByFilter(this.gameFilter.get()).then(response => {
                 this.setGameDatas(response);
-                this.fillGameContainer();
+                this.appendGameMapToContainer(this.gamesContainer, this.dataGameMap);
             });
         });
 
@@ -408,19 +411,24 @@ export class GameListPage extends PageComponent {
         ]);
     }
 
-    ready() {
-        this.fillGameContainer();
+    async refresh() {
+        this.appendGameMapToContainer(this.gamesContainer, this.dataGameMap);
     }
 
-    fillGameContainer() {
-        this.gamesContainer.innerHTML = "";
-        this.dataGameMap.forEach(game => {
+    ready() {
+        this.appendGameMapToContainer(this.gamesContainer, this.dataGameMap);
+    }
+
+    appendGameMapToContainer(container, map) {
+        container.innerHTML = "";
+        map.forEach(game => {
             const clone = this.gameTemplate.clone(game);
-            this.gamesContainer.appendChild(clone);
-            clone.addEventListener("click", event => {
-                console.log(clone);
-            })
+            if(clone) container.appendChild(clone);
         });
+        container.addEventListener("game-click", event => {
+            this.cartModal.addGame(event.detail.item);
+        });
+
     }
 
     setGameDatas(gameDatas){

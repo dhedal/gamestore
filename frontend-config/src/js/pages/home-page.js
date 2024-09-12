@@ -1,7 +1,7 @@
 import { PageComponent } from "components/page-component.js";
-import { GameService} from "../services/game-service.js";
 import { PageDataService } from "../services/page-data-service.js"
 import {GameTemplate} from "../templates/templates.js";
+import {CartModal} from "../modals/modal.js";
 
 export class HomePage extends PageComponent {
     dataLastGameMap;
@@ -9,13 +9,13 @@ export class HomePage extends PageComponent {
     lastGamesContainer;
     currentPromotionsContainer;
     gameTemplate;
+    cartModal;
 
     constructor() {
         super("/home", "Accueil", "/html/home.html", [""]);
     }
 
     async before() {
-        console.log("## homePage # before");
         this.dataLastGameMap = new Map();
         this.dataCurrentPromotionMap = new Map();
 
@@ -33,19 +33,28 @@ export class HomePage extends PageComponent {
         this.lastGamesContainer = document.getElementById("lastGamesContainer");
         this.currentPromotionsContainer = document.getElementById("currentPromotionsContainer");
         this.gameTemplate = new GameTemplate();
+        this.cartModal = new CartModal();
     }
 
     ready() {
-        console.log("## HomePage # ready");
-        this.dataLastGameMap.forEach(game => {
-            const clone = this.gameTemplate.clone(game);
-            this.lastGamesContainer.appendChild(clone);
-        });
+        this.appendGameMapToContainer(this.lastGamesContainer, this.dataLastGameMap);
+        this.appendGameMapToContainer(this.currentPromotionsContainer, this.dataCurrentPromotionMap);
+    }
 
-        this.dataCurrentPromotionMap.forEach(game => {
+    appendGameMapToContainer(container, map) {
+        container.innerHTML = "";
+        map.forEach(game => {
             const clone = this.gameTemplate.clone(game);
-            if(clone) this.currentPromotionsContainer.appendChild(clone);
+            if(clone) container.appendChild(clone);
         });
+        container.addEventListener("game-click", event => {
+            this.cartModal.addGame(event.detail.item);
+        });
+    }
+
+    async refresh() {
+        this.appendGameMapToContainer(this.lastGamesContainer, this.dataLastGameMap);
+        this.appendGameMapToContainer(this.currentPromotionsContainer, this.dataCurrentPromotionMap);
     }
 
 }

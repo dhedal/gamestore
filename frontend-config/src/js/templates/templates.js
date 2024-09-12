@@ -1,5 +1,10 @@
 import {cache} from "../config/cache.js";
+import {AuthenticationService} from "../services/authentication-service.js";
+import {appContext} from "../config/app-context";
 
+/**
+ *
+ */
 export class GameTemplate {
     template;
     constructor(templateId = "game-template") {
@@ -10,6 +15,13 @@ export class GameTemplate {
     clone(game) {
         if(game == null) return null;
         const clone = this.template.content.cloneNode(true);
+
+        if(!AuthenticationService.isConnected() || game.stock <= 0) {
+            clone.querySelector(".cartBtn").classList.add("visually-hidden");
+        }
+        else {
+            clone.querySelector(".cartBtn").classList.remove("visually-hidden");
+        }
 
         clone.querySelector(".card-bg").src = game.gameInfo.coverUrl;
         clone.querySelector(".card-title").textContent = game.gameInfo.title;
@@ -49,6 +61,9 @@ export class GameTemplate {
     }
 }
 
+/**
+ *
+ */
 export class GenreTemplate {
     template;
     constructor(templateId = "genre-template") {
@@ -63,4 +78,105 @@ export class GenreTemplate {
         button.textContent = genre.label;
         return clone;
     }
+}
+
+
+/**
+ *
+ */
+export class CartGameTemplate {
+    template;
+
+    constructor(templateId = "cart-game-template"){
+        this.template = document.getElementById(templateId);
+
+    }
+
+    clone(game) {
+        if(game == null) return;
+        const gameInfo = game.gameInfo;
+        if(gameInfo == null) return;
+
+        const clone = this.template.content.cloneNode(true);
+        const cartGame = clone.querySelector(".cart-game");
+
+        clone.querySelector(".cart-game-image").href = "/game-detail?game=" + game.uuid + "&info="+ gameInfo.uuid;
+        if(gameInfo.coverUrl){
+            clone.querySelector(".img-thumbnail").src = gameInfo.coverUrl;
+        }
+
+        cartGame.querySelector(".cart-game-title").textContent = gameInfo.title;
+
+        cartGame.querySelector(".cart-game-platform").textContent = game.platform.label;
+
+        const currencyTag = cartGame.querySelector(".cart-game-price i");
+        currencyTag.parentNode.insertBefore(document.createTextNode(game.price), currencyTag);
+
+        if(game.promotion) {
+            cartGame.querySelector(".cart-game-promo-purcent").textContent = "-"+game.promotion.discountRate + "%";
+        }
+
+        cartGame.querySelector(".cart-game-quantity").textContent = game.count;
+
+
+        cartGame.querySelector(".cart-game-remove-btn").addEventListener("click", event => {
+            event.preventDefault();
+            const customEvent = new CustomEvent("cart-game-remove-event", {
+                detail : {item: game},
+                bubbles: true,
+                composed: true
+            });
+
+            cartGame.dispatchEvent(customEvent);
+        });
+
+
+        cartGame.querySelector(".cart-game-add-btn").classList.remove("visually-hidden");
+        cartGame.querySelector(".cart-game-add-btn").addEventListener("click", event => {
+            event.preventDefault();
+            const customEvent = new CustomEvent("cart-game-add-event", {
+                detail : {item: game},
+                bubbles: true,
+                composed: true
+            });
+            cartGame.dispatchEvent(customEvent);
+        });
+
+
+
+
+        cartGame.querySelector(".cart-game-sub-btn").addEventListener("click", event => {
+            event.preventDefault();
+            const customEvent = new CustomEvent("cart-game-sub-event", {
+                detail : {item: game},
+                bubbles: true,
+                composed: true
+            });
+            cartGame.dispatchEvent(customEvent);
+        });
+
+        return clone;
+    }
+
+    /**
+     *
+     * @param {*} game
+     * @returns
+     */
+    forModal(game) {
+        return this.clone(game);
+    }
+
+    /**
+     *
+     * @param {*} game
+     */
+    forCartPage(game) {
+        const clone = this.clone(game);
+        const cartGame = clone.querySelector(".cart-game");
+        cartGame.classList.add("bg-light", "text-secondary", "p-3", "rounded-3", "w-75");
+
+        return clone;
+    }
+
 }

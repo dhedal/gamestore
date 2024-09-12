@@ -1,11 +1,14 @@
 import {PageComponent} from "../components/page-component.js";
 import {GameService} from "../services/game-service.js";
+import {CartModal} from "../modals/modal.js";
+import {AuthenticationService} from "../services/authentication-service.js";
 
 export class GameDetailPage extends PageComponent{
     gameMap;
     platformTagMap;
     game;
     addCartBtn;
+    cartModal;
 
     constructor() {
         super("/game-detail", "Game detail", "/html/game-detail.html", []);
@@ -24,6 +27,9 @@ export class GameDetailPage extends PageComponent{
             this.game = null;
         });
 
+
+        this.cartModal = new CartModal();
+
         this.addCartBtn = document.getElementById("addCartBtn");
 
     }
@@ -39,7 +45,7 @@ export class GameDetailPage extends PageComponent{
         this.fillPlatformGameVersion(game);
 
         document.getElementById("addCartBtn").addEventListener("click", event => {
-            console.log(game);
+            this.cartModal.addGame(this.game);
         });
     }
 
@@ -124,7 +130,7 @@ export class GameDetailPage extends PageComponent{
         const gameStock = document.getElementById("game-stock");
         gameStock.innerHTML = "";
 
-        if(game.stock > 0) {
+        if(AuthenticationService.isConnected() && game.stock > 0) {
             gamePrice.textContent = game.price + "€";
 
             gameStock.appendChild(this.spanText("En stock", ["text-success"]));
@@ -140,6 +146,9 @@ export class GameDetailPage extends PageComponent{
                 gamePromoPrice.textContent = this.calculatePromotion(game) + "€";
             }
 
+        }
+        else if(!AuthenticationService.isConnected()){
+            this.addCartBtn.classList.add("visually-hidden");
         }
         else {
             gameStock.appendChild(this.spanText("Rupture de stock", ["text-danger"]));
