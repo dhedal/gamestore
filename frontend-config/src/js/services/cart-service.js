@@ -1,3 +1,5 @@
+
+
 const CART_KEY = "cart";
 
 export class CartService {
@@ -22,6 +24,7 @@ export class CartService {
         item.count += quantity;
 
         if(item.count < 0) CartService.removeGame(item);
+        else if(item.count > item.stock) item.count = item.stock;
         else {
             cart.set(item.uuid, item);
             CartService.setCart(cart);
@@ -49,5 +52,29 @@ export class CartService {
 
         return [prices.toFixed(2), promoPrices.toFixed(2), (prices - promoPrices).toFixed(2)];
     }
+
+    static getGameUuidList() {
+        const cart = CartService.getCart();
+        return Array.from(cart.values()).map(value => value.uuid);
+    }
+
+    static updateStock(stockMap){
+        if(!stockMap || stockMap.size === 0) return;
+        const cart = CartService.getCart();
+        stockMap.forEach((value, key) => {
+            cart.get(key).stock = value;
+        });
+        CartService.setCart(cart);
+    }
+
+    static getArticlesOrder() {
+        const cart = CartService.getCart();
+        const commandeMap = new Map();
+        cart.forEach((item, uuid) => {
+            if(item.count > 0) commandeMap.set(uuid, item.count);
+        });
+        return  Object.fromEntries(commandeMap);
+    }
+
 
 }

@@ -36,12 +36,18 @@ export class AppMenu {
         });
 
         this.homeLink.addEventListener("click", event => {
+            event.preventDefault();
+            event.stopPropagation();
             this.resetLinkActive();
-            // window.route(event);
+            event.target.href = "/home";
+            window.route(event);
         });
 
         this.cartLink.addEventListener("click", event => {
+            event.preventDefault();
+            event.stopPropagation();
             this.resetLinkActive();
+            event.target.href = "/cart";
             window.route(event);
         });
 

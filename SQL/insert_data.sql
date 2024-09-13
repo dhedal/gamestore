@@ -60,3 +60,10 @@ insert into promotion (id, uuid, game_article_id, discount_rate, start_date, end
 
 insert into home_page_data_promotions (home_page_data_id, promotions_id) values
 (1, 1), (1, 2), (1, 3), (1, 4);
+
+insert into agence (id, uuid, name, address, code_postal, city, country, created_at) values
+(1, uuid(), "GameStore", "1 rue du jeux vidéo", 44000, "Nantes", "France", now()),
+(2, uuid(), "GameStore", "1 rue du jeux vidéo", 59800, "Lille", "France", now()),
+(3, uuid(), "GameStore", "1 rue du jeux vidéo", 33800, "Bordeaux", "France", now()),
+(4, uuid(), "GameStore", "1 rue du jeux vidéo", 75111, "Paris", "France", now()),
+(5, uuid(), "GameStore", "1 rue du jeux vidéo", 31000, "Toulouse", "France", now());

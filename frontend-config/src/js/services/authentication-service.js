@@ -41,8 +41,10 @@ export class AuthenticationService {
     }
 
     static getUser() {
-        const authData = AuthenticationService.getAuthData();
-        return authData ? authData.user : null;
+        // TODO: mettre en place JWT
+        // const authData = AuthenticationService.getAuthData();
+        // return authData ? authData.user : null;
+        return {uuid: "uuid-fake"};
     }
 
     static getRole() {

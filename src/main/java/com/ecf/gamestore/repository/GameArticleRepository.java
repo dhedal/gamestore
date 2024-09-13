@@ -39,5 +39,6 @@ public interface GameArticleRepository extends JpaRepository<GameArticle, Long> 
     @Query("SELECT ga.platform, COUNT(ga) FROM GameArticle ga GROUP BY ga.platform")
     public List<Object[]> countGameArticleByPlatforms(Platform [] platforms);
 
+    public List<GameArticle> findByUuidIn(List<String> uuidList);
 }
 

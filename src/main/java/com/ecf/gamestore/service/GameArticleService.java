@@ -114,4 +114,12 @@ public class GameArticleService extends AbstractService<GameArticleRepository, G
     }
 
 
+    public Map<String, Integer> getStockMap(List<String> uuidList) {
+        LOG.debug("## getStockMap(List<String> uuidList)");
+        if(CollectionUtils.isNullOrEmpty(uuidList)) return Map.of();
+        Map<String, Integer> stockMap = new HashMap<>();
+        List<GameArticle> gameArticles = this.repository.findByUuidIn(uuidList);
+        gameArticles.forEach(gameArticle -> stockMap.put(gameArticle.getUuid(), gameArticle.getStock()));
+        return stockMap;
+    }
 }

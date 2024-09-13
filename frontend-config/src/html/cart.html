@@ -1,0 +1,109 @@
+<div class="container">
+
+  <div id="cartStepCarousel" class="carousel slide" data-bs-ride="false" data-bs-interval="false" >
+    <div class="carousel-inner">
+
+      <div class="carousel-item active">
+        <div class="row gx-5 mt-5">
+
+          <div class="col-lg-8 col-md-12">
+            <h4 class="mb-3">Panier</h4>
+            <div id="cart-game-container" class="col-12"></div>
+          </div>
+
+          <div class="col-lg-4 col-md-12">
+            <h4 class="mb-3">Commande</h4>
+            <div id="facture-container" class="row border border-2 rounded-3 p-3 bg-dark ">
+              <div class="col-12 text-light mb-1">
+                <span class="float-start">Prix officiel</span>
+                <span class="float-end">
+                                    <span class="cart-facture-price"></span>
+                                    <i class="bi bi-currency-euro"></i>
+                                </span>
+              </div>
+              <div class="col-12 text-light mb-3">
+                <span class="float-start">Réduction</span>
+                <span class="float-end">
+                                    <span class="cart-facture-promo"></span>
+                                    <i class="bi bi-currency-euro"></i>
+                                </span>
+              </div>
+              <div class="col-12 text-light fw-bold mb-3">
+                <span class="float-start">Sous-total</span>
+                <span class="cart-facture float-end">
+                                    <span class="cart-facture"></span>
+                                    <i class="bi bi-currency-euro"></i>
+                                </span>
+              </div>
+              <div class="col-12 mb-3">
+                <button id="reserveBtn" disabled class="btn btn-outline-warning w-100" data-bs-target="#cartStepCarousel" data-bs-slide-to="1" aria-label="Slide 2">Réserver</button>
+              </div>
+              <div class="cart-progress text-light mb-3">
+                <span class="cart-line-light"></span>
+                <span>ou</span>
+                <span class="cart-line-light"></span>
+              </div>
+              <div class="col-12">
+                <a class="link-info" href="/home">
+                  <i class="bi bi-arrow-bar-left"></i>
+                  Continuer mes achats
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="carousel-item">
+        <div class="d-flex justify-content-center">
+          <div class="row">
+            <div class="col-12">
+              <h4 class="mb-3">Agende de retrait</h4>
+              <div class="input-group mb-3">
+                <label class="input-group-text" for="pickup-location">Options</label>
+                <select class="form-select" id="pickup-location">
+                  <option selected value="">Choose...</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-12 mb-3">
+              <div class="mb-3">
+                <h4 class="mb-3">
+                  Date de retrait
+                  <span class="fs-6">(entre 9h et 19h)</span>
+                </h4>
+
+              </div>
+              <div id="pickup-dates"></div>
+            </div>
+
+            <div class="col-12 mb-3">
+              <button disabled id="orderBtn" class="btn btn-outline-primary w-100">Commander</button>
+            </div>
+            <div class="col-12"></div>
+            <a class="link-info" href="javascript:void(0)" data-bs-target="#cartStepCarousel" data-bs-slide-to="0" aria-current="true" aria-label="Slide 1">
+              <i class="bi bi-arrow-bar-left"></i>
+              Revenir au panier
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-item"><h1>SUCCES</h1></div>
+  </div>
+</div>
+
+<div id="cart-empty-message" class="row text-center fw-bold mt-5 fs-4 fw-bold visually-hidden">
+  <div class="col-12">
+    <span class="fs-4 text-warning"><i class="bi bi-cart4"></i></span>
+  </div>
+  <p class="col-12">
+    Votre panier est vide.
+  </p>
+</div>
+
+</div>
