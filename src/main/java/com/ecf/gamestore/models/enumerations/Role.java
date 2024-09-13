@@ -7,9 +7,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 @JsonDeserialize(using = RoleDeserializer.class)
 public enum Role {
+    UNDEFINED( 0, "indéfinie"),
     USER(1, "user"),
     EMPLOYEE( 2, "employee"),
-    ADMIN( 2, "admin");
+    ADMIN( 3, "admin");
 
 
     private Integer key;
@@ -31,6 +32,7 @@ public enum Role {
     public static Role getByKey(int key){
         if(key == EMPLOYEE.key.intValue()) return EMPLOYEE;
         if(key == ADMIN.key.intValue()) return ADMIN;
-        return USER;
+        if(key == USER.key.intValue()) return USER;
+        return UNDEFINED;
     }
 }

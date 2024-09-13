@@ -3,6 +3,8 @@ package com.ecf.gamestore.models;
 import com.ecf.gamestore.models.enumerations.Role;
 import com.ecf.gamestore.models.interfaces.IEntity;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -21,9 +23,13 @@ public class GSUser implements IEntity {
     private String email;
     @Column(nullable = false, length = 255)
     private String password;
+    @Column(nullable = false)
     private Role role;
-    private LocalDateTime createAt;
-    private LocalDateTime updateAt;
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     @Override
     public Long getId() {
@@ -79,21 +85,21 @@ public class GSUser implements IEntity {
         this.role = role;
     }
 
-    public LocalDateTime getCreateAt() {
-        return createAt;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     @Override
     public void setCreatedAt(LocalDateTime createAt) {
-        this.createAt = createAt;
+        this.createdAt = createAt;
     }
 
-    public LocalDateTime getUpdateAt() {
-        return updateAt;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     @Override
     public void setUpdatedAt(LocalDateTime updateAt) {
-        this.updateAt = updateAt;
+        this.updatedAt = updateAt;
     }
 }

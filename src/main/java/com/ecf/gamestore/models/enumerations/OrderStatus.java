@@ -8,16 +8,16 @@ import java.util.stream.Stream;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 @JsonDeserialize(using = CommandStatusDeserializer.class)
-public enum CommandStatus {
-    PENDING(1, "en attente"),
-    VALIDATED(2, "validé"),
-    DELIVERED(3, "livré");
+public enum OrderStatus {
+    UNDEFINED(0, "indéfinie"),
+    VALIDATED(1, "validé"),
+    DELIVERED(2, "livré");
 
 
     private Integer key;
     private String label;
 
-    CommandStatus(Integer key, String label){
+    OrderStatus(Integer key, String label){
         this.key = key;
         this.label = label;
     }
@@ -30,9 +30,9 @@ public enum CommandStatus {
         return label;
     }
 
-    public static CommandStatus getByKey(int key) {
-        return Stream.of(CommandStatus.values())
-                .filter(commandStatus -> commandStatus.key.intValue() == key)
-                .findFirst().orElse(CommandStatus.PENDING);
+    public static OrderStatus getByKey(int key) {
+        return Stream.of(OrderStatus.values())
+                .filter(orderStatus -> orderStatus.key.intValue() == key)
+                .findFirst().orElse(OrderStatus.UNDEFINED);
     }
 }

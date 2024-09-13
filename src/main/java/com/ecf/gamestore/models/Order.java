@@ -1,43 +1,48 @@
 package com.ecf.gamestore.models;
 
-import com.ecf.gamestore.models.enumerations.CommandStatus;
+import com.ecf.gamestore.models.enumerations.OrderStatus;
 import com.ecf.gamestore.models.interfaces.IEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
-@Entity
-public class Command implements IEntity {
+@Entity(name = "orders")
+public class Order implements IEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Column(updatable = false, nullable = false, unique = true, length = 36)
     private String uuid;
     @Column(nullable = false)
-    private LocalDateTime pickupDate;
+    private LocalDate pickupDate;
     @Column(nullable = false)
-    private CommandStatus commandStatus;
+    private OrderStatus status;
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private GSUser user;
     @ManyToOne(optional = false)
     @JoinColumn(name = "agence_id", nullable = false)
     private Agence agence;
-    @OneToMany(mappedBy = "command", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CommandLine> commandLines;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderLine> orderLines;
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
     @Override
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUuid() {
@@ -49,20 +54,20 @@ public class Command implements IEntity {
         this.uuid = uuid;
     }
 
-    public LocalDateTime getPickupDate() {
+    public LocalDate getPickupDate() {
         return pickupDate;
     }
 
-    public void setPickupDate(LocalDateTime pickupDate) {
+    public void setPickupDate(LocalDate pickupDate) {
         this.pickupDate = pickupDate;
     }
 
-    public CommandStatus getCommandStatus() {
-        return commandStatus;
+    public OrderStatus getStatus() {
+        return status;
     }
 
-    public void setCommandStatus(CommandStatus commandStatus) {
-        this.commandStatus = commandStatus;
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 
     public GSUser getUser() {
@@ -81,29 +86,30 @@ public class Command implements IEntity {
         this.agence = agence;
     }
 
-    public List<CommandLine> getCommandLines() {
-        return Collections.unmodifiableList(this.commandLines);
+    public List<OrderLine> getOrderLines() {
+        return orderLines;
     }
 
-    public void setCommandLines(List<CommandLine> commandLines) {
-        this.commandLines = commandLines;
+    public void setOrderLines(List<OrderLine> orderLines) {
+        this.orderLines = orderLines;
     }
 
-    public LocalDateTime getCreateAt() {
-        return createAt;
-    }
-
-    @Override
-    public void setCreatedAt(LocalDateTime createAt) {
-        this.createAt = createAt;
-    }
-
-    public LocalDateTime getUpdateAt() {
-        return updateAt;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     @Override
-    public void setUpdatedAt(LocalDateTime updateAt) {
-        this.updateAt = updateAt;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    @Override
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
 }

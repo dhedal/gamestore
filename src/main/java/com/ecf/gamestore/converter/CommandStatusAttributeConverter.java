@@ -1,20 +1,20 @@
 package com.ecf.gamestore.converter;
 
-import com.ecf.gamestore.models.enumerations.CommandStatus;
+import com.ecf.gamestore.models.enumerations.OrderStatus;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 import java.util.Objects;
 
 @Converter(autoApply = true)
-public class CommandStatusAttributeConverter implements AttributeConverter<CommandStatus, Integer> {
+public class CommandStatusAttributeConverter implements AttributeConverter<OrderStatus, Integer> {
     @Override
-    public Integer convertToDatabaseColumn(CommandStatus commandStatus) {
-        return Objects.isNull(commandStatus) ? CommandStatus.PENDING.getKey() : commandStatus.getKey();
+    public Integer convertToDatabaseColumn(OrderStatus orderStatus) {
+        return Objects.isNull(orderStatus) ? OrderStatus.UNDEFINED.getKey() : orderStatus.getKey();
     }
 
     @Override
-    public CommandStatus convertToEntityAttribute(Integer key) {
-        return Objects.isNull(key) ? CommandStatus.PENDING : CommandStatus.getByKey(key.intValue());
+    public OrderStatus convertToEntityAttribute(Integer key) {
+        return Objects.isNull(key) ? OrderStatus.UNDEFINED : OrderStatus.getByKey(key.intValue());
     }
 }

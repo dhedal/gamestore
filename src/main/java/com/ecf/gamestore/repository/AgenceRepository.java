@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AgenceRepository extends JpaRepository<Agence, Long> {
 
+    public Agence findByUuid(String uuid);
 }

@@ -67,3 +67,8 @@ insert into agence (id, uuid, name, address, code_postal, city, country, created
 (3, uuid(), "GameStore", "1 rue du jeux vidéo", 33800, "Bordeaux", "France", now()),
 (4, uuid(), "GameStore", "1 rue du jeux vidéo", 75111, "Paris", "France", now()),
 (5, uuid(), "GameStore", "1 rue du jeux vidéo", 31000, "Toulouse", "France", now());
+
+insert into user (id, uuid, first_name, last_name, email, password, role, created_at) values
+(1, uuid(), "admin", "admin", "admin@email.gs.com", "ECF++2test++3", 3, now()),
+(2, uuid(), "employee", "employee", "employee@email.gs.com", "ECF++2test++3", 2, now()),
+(3, uuid(), "user", "user", "user@email.gs.com", "ECF++2test++3", 1, now());

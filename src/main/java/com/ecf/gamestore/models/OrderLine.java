@@ -8,7 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-public class CommandLine implements IEntity {
+public class OrderLine implements IEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -18,23 +18,27 @@ public class CommandLine implements IEntity {
     @Column(nullable = false)
     private int quantity;
     @ManyToOne(optional = false)
-    @JoinColumn(name = "command_id", nullable = false)
-    private Command command;
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
     @ManyToOne(optional = false)
-    @JoinColumn(name = "game_video_id", nullable = false)
-    private GameArticle gameVideo;
+    @JoinColumn(name = "game_article_id", nullable = false)
+    private GameArticle gameArticle;
     @ManyToOne
-    @JoinColumn(name = "promotion_id")
+    @JoinColumn(name = "promotion_id", nullable = true)
     private Promotion promotion;
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
     @Override
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUuid() {
@@ -54,20 +58,20 @@ public class CommandLine implements IEntity {
         this.quantity = quantity;
     }
 
-    public Command getCommand() {
-        return command;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setCommand(Command command) {
-        this.command = command;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
-    public GameArticle getGameVideo() {
-        return gameVideo;
+    public GameArticle getGameArticle() {
+        return gameArticle;
     }
 
-    public void setGameVideo(GameArticle gameVideo) {
-        this.gameVideo = gameVideo;
+    public void setGameArticle(GameArticle gameArticle) {
+        this.gameArticle = gameArticle;
     }
 
     public Promotion getPromotion() {
@@ -78,21 +82,21 @@ public class CommandLine implements IEntity {
         this.promotion = promotion;
     }
 
-    public LocalDateTime getCreateAt() {
-        return createAt;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     @Override
-    public void setCreatedAt(LocalDateTime createAt) {
-        this.createAt = createAt;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdateAt() {
-        return updateAt;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     @Override
-    public void setUpdatedAt(LocalDateTime updateAt) {
-        this.updateAt = updateAt;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

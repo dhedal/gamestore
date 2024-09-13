@@ -1,7 +1,12 @@
 package com.ecf.gamestore.dto;
 
+import com.ecf.gamestore.utils.CollectionUtils;
+import org.springframework.util.StringUtils;
+
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class OrderDTO {
 
@@ -10,7 +15,7 @@ public class OrderDTO {
     private LocalDate date;
 
     public Map<String, Integer> getArticles() {
-        return articles;
+        return CollectionUtils.isNullOrEmpty(this.articles) ? Map.of() : this.articles;
     }
 
     public void setArticles(Map<String, Integer> articles) {
@@ -41,5 +46,17 @@ public class OrderDTO {
         sb.append(", date=").append(date);
         sb.append('}');
         return sb.toString();
+    }
+
+    public List<String> getUuids() {
+        if(CollectionUtils.isNullOrEmpty(this.articles)) return List.of();
+        return this.articles.keySet().stream().toList();
+    }
+
+    public boolean isValid() {
+        if(CollectionUtils.isNullOrEmpty(this.articles)) return false;
+        if(!StringUtils.hasText(this.agence)) return false;
+        if(Objects.isNull(this.date)) return false;
+        return true;
     }
 }

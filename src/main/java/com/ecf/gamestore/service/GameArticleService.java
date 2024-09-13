@@ -122,4 +122,10 @@ public class GameArticleService extends AbstractService<GameArticleRepository, G
         gameArticles.forEach(gameArticle -> stockMap.put(gameArticle.getUuid(), gameArticle.getStock()));
         return stockMap;
     }
+
+    public List<GameArticle> getGameArticles(List<String> uuids) {
+        LOG.debug("## getGameArticles(List<String> uuids)");
+        if(CollectionUtils.isNullOrEmpty(uuids)) return List.of();
+        return this.repository.findByUuidIn(uuids);
+    }
 }
