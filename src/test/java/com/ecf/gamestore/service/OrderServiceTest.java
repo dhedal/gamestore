@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,6 +28,8 @@ public class OrderServiceTest {
     private GSUserService gsUserService;
     @Autowired
     private AgenceService agenceService;
+    @Autowired
+    private GameArticleService gameArticleService;
 
     @Test
     public void register_test() {
@@ -41,18 +45,22 @@ public class OrderServiceTest {
 
             GameArticle gameArticle = promotion.getGameArticle();
             assertNotNull(gameArticle);
+            int stock = gameArticle.getStock().intValue();
 
-            Integer count = 1;
+            int count = 1;
 
             OrderDTO orderDTO = new OrderDTO();
             Map<String, Integer> articleOrderMap = new HashMap<>();
-            articleOrderMap.put(gameArticle.getUuid(), count);
+            articleOrderMap.put(gameArticle.getUuid(), Integer.valueOf(count));
             orderDTO.setArticles(articleOrderMap);
             orderDTO.setDate(LocalDate.now());
             orderDTO.setAgence(agence.getUuid());
 
             Order order = this.orderService.register(orderDTO);
             assertNotNull(order);
+            assertNotNull(order.getId());
+            assertNotNull(order.getUuid());
+            assertNotNull(order.getCreatedAt());
 
             assertEquals(order.getPickupDate(), orderDTO.getDate());
             assertEquals(order.getUser().getId(), user.getId());
@@ -65,6 +73,10 @@ public class OrderServiceTest {
             assertEquals(orderLine.getOrder().getId(), order.getId());
             assertEquals(orderLine.getQuantity(), articleOrderMap.get(orderLine.getGameArticle().getUuid()));
             assertEquals(orderLine.getPromotion().getId(), promotion.getId());
+
+            GameArticle article = this.gameArticleService.findById(gameArticle.getId());
+            assertNotNull(article);
+            assertTrue(stock - count == article.getStock().intValue());
 
         } catch (Throwable e) {
             e.printStackTrace();

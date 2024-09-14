@@ -24,6 +24,7 @@ public class OrderService extends AbstractService<OrderRepository, Order>{
     private PromotionService promotionService;
     private AgenceService agenceService;
     private GSUserService gsUserService;
+    private MailService mailService;
 
     @Autowired
     public OrderService(
@@ -32,13 +33,15 @@ public class OrderService extends AbstractService<OrderRepository, Order>{
             @Lazy GameArticleService gameArticleService,
             @Lazy PromotionService promotionService,
             @Lazy AgenceService agenceService,
-            @Lazy GSUserService gsUserService){
+            @Lazy GSUserService gsUserService,
+            @Lazy MailService mailService){
         super(repository);
         this.orderLineService = orderLineService;
         this.gameArticleService = gameArticleService;
         this.promotionService = promotionService;
         this.agenceService = agenceService;
         this.gsUserService = gsUserService;
+        this.mailService = mailService;
     }
 
     public Order register(OrderDTO orderDTO) throws Throwable {
@@ -52,6 +55,12 @@ public class OrderService extends AbstractService<OrderRepository, Order>{
 
         List<GameArticle> gameArticles = this.gameArticleService.getGameArticles(orderDTO.getUuids());
         if(CollectionUtils.isNullOrEmpty(gameArticles)) return null;
+
+        List<String> uuidsList = gameArticles.stream()
+                .filter(gameArticle -> gameArticle.getStock().intValue() <= 0)
+                .map(GameArticle::getUuid)
+                .collect(Collectors.toList());
+        if(!CollectionUtils.isNullOrEmpty(uuidsList))  return null;
 
         List<Promotion> promotions = this.promotionService.getPromotions(gameArticles);
         Map<Long, Promotion> promotionMap = new HashMap<>();
@@ -77,16 +86,32 @@ public class OrderService extends AbstractService<OrderRepository, Order>{
                     if(promotionMap.containsKey(gameArticle.getId())){
                         orderLine.setPromotion(promotionMap.get(gameArticle.getId()));
                     }
-
-
                     return orderLine;
                 })
                 .collect(Collectors.toList());
         order.setOrderLines(orderLines);
+        Order newOrder = this.save(order);
 
-        //TODO: envoyer un mail de confirmation
+        this.updateStock(newOrder);
+        this.mailService.sendOrderConfirmationEmail(newOrder);
 
-        return this.save(order);
+        return newOrder;
+    }
 
+    private void updateStock(Order order) {
+        if(Objects.isNull(order)) return;
+        List<OrderLine> orderLines = order.getOrderLines();
+        if(CollectionUtils.isNullOrEmpty(orderLines)) return;
+
+        for(OrderLine orderLine: orderLines) {
+            try {
+                GameArticle gameArticle = orderLine.getGameArticle();
+                int stock = gameArticle.getStock().intValue() - orderLine.getQuantity();
+                gameArticle.setStock(Integer.valueOf(stock));
+                this.gameArticleService.save(gameArticle);
+            } catch (Exception e) {
+                LOG.error(e.toString());
+            }
+        }
     }
 }

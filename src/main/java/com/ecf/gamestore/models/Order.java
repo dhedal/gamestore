@@ -2,12 +2,14 @@ package com.ecf.gamestore.models;
 
 import com.ecf.gamestore.models.enumerations.OrderStatus;
 import com.ecf.gamestore.models.interfaces.IEntity;
+import com.ecf.gamestore.utils.CollectionUtils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -87,7 +89,8 @@ public class Order implements IEntity {
     }
 
     public List<OrderLine> getOrderLines() {
-        return orderLines;
+        if(CollectionUtils.isNullOrEmpty(this.orderLines)) return List.of();
+        return Collections.unmodifiableList(this.orderLines);
     }
 
     public void setOrderLines(List<OrderLine> orderLines) {
