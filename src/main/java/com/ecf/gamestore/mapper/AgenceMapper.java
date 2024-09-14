@@ -19,6 +19,8 @@ public class AgenceMapper {
         dto.setCodePostal(agence.getCodePostal());
         dto.setCity(agence.getCity());
         dto.setCountry(agence.getCountry());
+        dto.setLatitude(agence.getLatitude());
+        dto.setLongitude(agence.getLongitude());
         return dto;
     }
 

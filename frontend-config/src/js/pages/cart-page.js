@@ -3,6 +3,8 @@ import {CartGameTemplate} from "../templates/templates.js";
 import {CartService} from "../services/cart-service.js";
 import {PageDataService} from "../services/page-data-service.js";
 import {OrderService} from "../services/order-service";
+import {GeolocationService} from "../services/geolocation-service.js";
+import { Carousel } from 'bootstrap';
 
 
 export class CartPage extends PageComponent{
@@ -46,9 +48,24 @@ export class CartPage extends PageComponent{
                 agence : this.agenceMap.get(this.cityValue).uuid,
                 date: new Date(this.pickupDateValue),
             }
-            console.log(JSON.stringify(order));
             OrderService.postRegister(order).then(response => {
-                console.log(response);
+                const messageTag = document.getElementById("confirmation-message");
+                messageTag.innerHTML = "";
+                if(response.ok) {
+                    CartService.clear();
+                    let message ="Merci pour votre commande !";
+                    if(response.emailSent) {
+                        message += " Un email de confirmation vous a été envoyé.";
+                    }
+                    messageTag.textContent = message;
+
+                }
+                else {
+                    messageTag.textContent = "Une erreur est survenue lors de l'enregistrement de votre commande. Veuillez réessayer plus tard."
+                }
+                const carouselElement = document.getElementById("cartStepCarousel");
+                const carousel = new Carousel(carouselElement);
+                carousel.to(2);
             })
         });
 
@@ -156,6 +173,15 @@ export class CartPage extends PageComponent{
             pickupLocationContainer.appendChild(this.option(city));
         });
 
+        GeolocationService.getClosestAgency(this.agenceMap)
+            .then(agency => {
+                this.cityValue = agency.city;
+                if(this.cityValue) pickupLocationContainer.value = this.cityValue;
+            })
+            .catch(error => {
+                console.error("Erreur de géolocalisation :", error.message)
+            });
+
         pickupLocationContainer.addEventListener("change", event => {
             event.stopPropagation();
             this.cityValue = event.target.value;
@@ -177,5 +203,6 @@ export class CartPage extends PageComponent{
             this.pickupDateValue.length === 0;
         this.orderBtn.disabled = disabled;
     }
+
 
 }

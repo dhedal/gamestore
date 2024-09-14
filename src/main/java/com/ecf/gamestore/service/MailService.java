@@ -54,18 +54,18 @@ public class MailService {
             double price = article.getPrice();
             totalPrix += (orderLine.getQuantity() * price);
 
-            sb.append("\n\t\tTitre         : ").append(article.getGameInfo().getTitle()).append("\n");
-            sb.append("\t\tVersion       : ").append(article.getPlatform().getLabel()).append("\n");
-            sb.append("\t\tQuantité      : ").append(orderLine.getQuantity()).append("\n");
-            sb.append("\t\tPrix unitaire : ").append(numberFormat.format(price)).append("\n");
+            sb.append("\n\t\tTitre              : ").append(article.getGameInfo().getTitle()).append("\n");
+            sb.append("\t\tVersion            : ").append(article.getPlatform().getLabel()).append("\n");
+            sb.append("\t\tQuantité           : ").append(orderLine.getQuantity()).append("\n");
+            sb.append("\t\tPrix unitaire      : ").append(numberFormat.format(price)).append("\n");
 
 
             if(Objects.nonNull(orderLine.getPromotion())){
                 Promotion promotion = orderLine.getPromotion();
                 double reduction = (price * promotion.getDiscountRate()) / 100;
-                sb.append("\t\tRéduction     : ").append(promotion.getDiscountRate()).append("% --> ")
+                sb.append("\t\tRéduction unitaire : ").append(promotion.getDiscountRate()).append("% --> ")
                         .append(numberFormat.format(reduction)).append("\n");
-                totalReduction += reduction;
+                totalReduction += orderLine.getQuantity() * reduction;
             }
             sb.append("\t\t---------------").append("\n");
         }

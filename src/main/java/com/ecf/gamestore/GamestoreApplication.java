@@ -10,4 +10,5 @@ public class GamestoreApplication {
         SpringApplication.run(GamestoreApplication.class, args);
     }
 
+
 }

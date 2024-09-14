@@ -61,12 +61,12 @@ insert into promotion (id, uuid, game_article_id, discount_rate, start_date, end
 insert into home_page_data_promotions (home_page_data_id, promotions_id) values
 (1, 1), (1, 2), (1, 3), (1, 4);
 
-insert into agence (id, uuid, name, address, code_postal, city, country, created_at) values
-(1, uuid(), "GameStore", "1 rue du jeux vidéo", 44000, "Nantes", "France", now()),
-(2, uuid(), "GameStore", "1 rue du jeux vidéo", 59800, "Lille", "France", now()),
-(3, uuid(), "GameStore", "1 rue du jeux vidéo", 33800, "Bordeaux", "France", now()),
-(4, uuid(), "GameStore", "1 rue du jeux vidéo", 75111, "Paris", "France", now()),
-(5, uuid(), "GameStore", "1 rue du jeux vidéo", 31000, "Toulouse", "France", now());
+insert into agence (id, uuid, name, address, code_postal, city, country, latitude, longitude, created_at) values
+(1, uuid(), "GameStore", "1 rue du jeux vidéo", 44000, "Nantes", "France", 47.2173, -1.5428, now()),
+(2, uuid(), "GameStore", "1 rue du jeux vidéo", 59777, "Lille", "France", 50.6391, 3.0753, now()),
+(3, uuid(), "GameStore", "1 rue du jeux vidéo", 33800, "Bordeaux", "France", 44.8253, -0.5560, now()),
+(4, uuid(), "GameStore", "1 rue du jeux vidéo", 75010, "Paris", "France", 48.8809, 2.3553, now()),
+(5, uuid(), "GameStore", "1 rue du jeux vidéo", 31000, "Toulouse", "France",  43.6119, 1.4546, now());
 
 insert into user (id, uuid, first_name, last_name, email, password, role, created_at) values
 (1, uuid(), "admin", "admin", "admin@email.gs.com", "ECF++2test++3", 3, now()),

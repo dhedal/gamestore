@@ -24,6 +24,10 @@ public class Agence implements IEntity {
     private String city;
     @Column(nullable = false, length = 30)
     private String country;
+    @Column(nullable = false)
+    private Double longitude;
+    @Column(nullable = false)
+    private Double latitude;
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -86,6 +90,22 @@ public class Agence implements IEntity {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -10,7 +10,12 @@ export class CartService {
     }
 
     static setCart(cart) {
+        if(cart == null) return;
         localStorage.setItem(CART_KEY, JSON.stringify(Object.fromEntries(cart)));
+    }
+
+    static clear() {
+        localStorage.setItem(CART_KEY, null);
     }
 
     static getGame(uuid) {

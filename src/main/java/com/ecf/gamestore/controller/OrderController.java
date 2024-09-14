@@ -3,6 +3,7 @@ package com.ecf.gamestore.controller;
 import com.ecf.gamestore.dto.GameArticleDTO;
 import com.ecf.gamestore.dto.GameFilterDTO;
 import com.ecf.gamestore.dto.OrderDTO;
+import com.ecf.gamestore.dto.ValidationOrderResponse;
 import com.ecf.gamestore.mapper.GameArticleMapper;
 import com.ecf.gamestore.models.GSUser;
 import com.ecf.gamestore.models.GameArticle;
@@ -45,18 +46,17 @@ public class OrderController {
     }
 
     @PostMapping(path="/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OrderDTO> register (@RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<ValidationOrderResponse> register (@RequestBody OrderDTO orderDTO) {
         LOG.debug("## register (@RequestBody OrderDTO orderDTO)");
+        ValidationOrderResponse response = new ValidationOrderResponse();
         try {
             LOG.debug(orderDTO.toString());
-            Order order = this.orderService.register(orderDTO);
-            return ResponseEntity.ok(Objects.isNull(order) ? null : orderDTO);
-
+            response = this.orderService.register(response, orderDTO);
         }catch (Exception e) {
             LOG.error(e.toString());
         } catch (Throwable e) {
             LOG.error(e.toString());
         }
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(response);
     }
 }

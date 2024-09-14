@@ -1,6 +1,7 @@
 package com.ecf.gamestore.service;
 
 import com.ecf.gamestore.dto.OrderDTO;
+import com.ecf.gamestore.dto.ValidationOrderResponse;
 import com.ecf.gamestore.models.*;
 import com.ecf.gamestore.models.enumerations.OrderStatus;
 import org.junit.jupiter.api.Test;
@@ -55,8 +56,13 @@ public class OrderServiceTest {
             orderDTO.setArticles(articleOrderMap);
             orderDTO.setDate(LocalDate.now());
             orderDTO.setAgence(agence.getUuid());
+            ValidationOrderResponse response = new ValidationOrderResponse();
+            response = this.orderService.register(response, orderDTO);
 
-            Order order = this.orderService.register(orderDTO);
+            assertTrue(response.isOk());
+            assertTrue(response.isEmailSent());
+
+            Order order = this.orderService.findByUuid(response.getOrder());
             assertNotNull(order);
             assertNotNull(order.getId());
             assertNotNull(order.getUuid());

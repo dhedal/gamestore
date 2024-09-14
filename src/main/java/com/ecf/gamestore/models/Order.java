@@ -30,7 +30,7 @@ public class Order implements IEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "agence_id", nullable = false)
     private Agence agence;
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<OrderLine> orderLines;
     @CreationTimestamp
     @Column(updatable = false)
