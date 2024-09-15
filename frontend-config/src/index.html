@@ -36,7 +36,7 @@
                             <a id="app-menu-cart-link" href="/cart" class="btn btn-outline-secondary me-2 fs-4">
                                 <i class="bi bi-cart4"></i>
                             </a>
-                            <button id="loginBtn" type="button" class="btn btn-outline-secondary fs-4" data-bs-target="#loginModal" data-bs-toggle="modal" >
+                            <button id="loginBtn" type="button" class="btn btn-outline-secondary fs-4" data-bs-target="#authentication-modal" data-bs-toggle="modal" >
                                 <i class="bi bi-person-circle"></i>
                             </button>
                         </div>
@@ -116,7 +116,7 @@
 
 
         <!-- Full screen modal login -->
-        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalFullscreenLabel"  aria-hidden="true">
+        <div class="modal fade" id="authentication-modal" tabindex="-1" aria-labelledby="exampleModalFullscreenLabel"  aria-hidden="true">
             <div class="modal-dialog modal-fullscreen">
                 <div class="modal-content">
                     <div class="modal-body p-5">
@@ -126,85 +126,113 @@
                             <button class="btn btn-outline-light fs-4" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
                         </div>
 
-                        <div class="row m-5">
-                            <div class="col-6">
+                        <div class="container">
+                        <div class="m-5">
+<!--                            <div class="col-6">-->
                                 <!--      SIGNIN CAROUSEL ITEM -->
                                 <div id="formCarousel" class="carousel slide" data-bs-ride="false" data-bs-interval="false" >
                                     <div class="carousel-inner">
                                         <div class="carousel-item active">
-                                            <!--      LOGIN CAROUSEL ITEM -->
-                                            <form class="login-form">
-                                                <h4 class="mb-4">Se connecter</h4>
-                                                <div class="mb-4 form-floating" >
-                                                    <input type="email" class="form-control" id="emailLogin" >
-                                                    <label for="emailLogin">email</label>
+                                            <!--      SIGNIN CAROUSEL ITEM -->
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <form class="signin-form">
+                                                        <h4 class="mb-4">Se connecter</h4>
+                                                        <div class="mb-4 form-floating" >
+                                                            <input type="email" class="form-control" id="signin-email" value="" required>
+                                                            <label for="signin-email">email</label>
+                                                        </div>
+                                                        <div class="form-floating mb-4">
+                                                            <input type="password" class="form-control" id="signin-password" value="" required>
+                                                            <label for="signin-password">Mot de passe</label>
+                                                        </div>
+                                                        <button id="signin-submit" class="btn btn-outline-primary mb-3">Se connecter</button>
+                                                        <div class="d-flex flex-wrap justify-content-md-between">
+                                                            <button class="btn btn-link" data-bs-target="#formCarousel" data-bs-slide="next">
+                                                                Créer un compte
+                                                                <i class="bi bi-arrow-bar-right"></i>
+                                                            </button>
+                                                            <a href="/forgot-password" class="btn btn-link">J'ai oublié mon mot de passe</a>
+                                                        </div>
+                                                    </form>
                                                 </div>
-                                                <div class="form-floating mb-4">
-                                                    <input type="password" class="form-control" id="passwordLogin">
-                                                    <label for="passwordLogin">Mot de passe</label>
-                                                </div>
-                                                <button class="btn btn-outline-primary mb-3">Se connecter</button>
-                                                <div class="d-flex flex-wrap justify-content-md-between">
-                                                    <button class="btn btn-link" data-bs-target="#formCarousel" data-bs-slide="next">Créer un compte</button>
-                                                    <a href="/forgot-password" class="btn btn-link">J'ai oublié mon mot de passe</a>
-                                                </div>
-                                            </form>
+                                            </div>
+
                                         </div>
 
                                         <div class="carousel-item">
                                             <!--      INSCRIPTION -->
-                                            <form class="login-form">
-                                                <div class="d-flex flex-wrap justify-content-md-between mb-4">
-                                                    <div class="fs-4">Créer un compte</div>
-                                                    <button class="btn btn-link" data-bs-target="#formCarousel" data-bs-slide="prev">Se connecter</button>
-                                                </div>
-                                                <div class="mb-4 form-floating" >
-                                                    <input type="text" class="form-control" id="prenom" >
-                                                    <label for="prenom">Prénom</label>
-                                                </div>
-                                                <div class="mb-4 form-floating" >
-                                                    <input type="text" class="form-control" id="nom" >
-                                                    <label for="nom">Nom</label>
-                                                </div>
-                                                <div class="mb-4 form-floating" >
-                                                    <input type="email" class="form-control" id="emailSignup" >
-                                                    <label for="emailSignup">email</label>
-                                                </div>
-                                                <hr>
-                                                <h6 class="mb-4">Votre adresse</h6>
-                                                <div class="mb-4 form-floating" >
-                                                    <input type="number" class="form-control" id="adressNum" >
-                                                    <label for="adresseNum">Numéro de la voie</label>
-                                                </div>
-                                                <div class="mb-4 form-floating" >
-                                                    <input type="text" class="form-control" id="adressName" >
-                                                    <label for="adresseNum">Nom de la voie</label>
-                                                </div>
-                                                <div class="mb-4 form-floating" >
-                                                    <input type="number" class="form-control" id="adressCP" >
-                                                    <label for="adressCP">Code postal</label>
-                                                </div>
-                                                <div class="mb-4 form-floating" >
-                                                    <input type="text" class="form-control" id="cityName" >
-                                                    <label for="cityName">Code postal</label>
-                                                </div>
-                                                <div class="mb-4 form-floating" >
-                                                    <input type="text" class="form-control" id="coutryName" >
-                                                    <label for="coutryName">Code postal</label>
-                                                </div>
-                                                <hr class="mb-4">
-                                                <div class="form-floating mb-4">
-                                                    <input type="password" class="form-control" id="passwordSignup">
-                                                    <label for="passwordSignup">Mot de passe</label>
-                                                </div>
-                                                <div class="form-floating mb-4">
-                                                    <input type="password" class="form-control" id="passwordCopy">
-                                                    <label for="passwordCopy">Ressaisisez votre mot de passe</label>
-                                                </div>
-                                                <hr>
-                                                <button class="btn btn-outline-primary mb-3">Envoyer</button>
-                                                <div class="d-flex flex-wrap justify-content-md-between">
-                                                    <button class="btn btn-link" data-bs-target="#formCarousel" data-bs-slide="prev">Se connecter</button>
+                                            <form class="signup-form">
+                                                <div class="row g-5">
+                                                    <div class="col-12">
+                                                        <div class="d-flex flex-wrap justify-content-md-between mb-4">
+                                                            <div class="fs-4">Créer un compte</div>
+                                                            <button class="btn btn-link" data-bs-target="#formCarousel" data-bs-slide="prev">
+                                                                <i class="bi bi-arrow-bar-left"></i>
+                                                                Se connecter
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-12">
+                                                        <h6 class="mb-4">Nom et prénom</h6>
+                                                        <div class="mb-4 form-floating" >
+                                                            <input type="text" class="form-control" id="signup-first-name" required>
+                                                            <label for="signup-first-name">Prénom</label>
+                                                        </div>
+                                                        <div class="mb-5 form-floating" >
+                                                            <input type="text" class="form-control" id="signup-last-name" required>
+                                                            <label for="signup-last-name">Nom</label>
+                                                        </div>
+                                                        <h6 class="mb-4">Votre adresse</h6>
+                                                        <div class="mb-4 form-floating" >
+                                                            <input type="text" class="form-control" id="signup-street-address" required>
+                                                            <label for="signup-street-address">Numéro et nom de la voie</label>
+                                                        </div>
+                                                        <div class="mb-4 form-floating" >
+                                                            <input type="number" class="form-control" id="signup-zip-code" required>
+                                                            <label for="signup-zip-code">Code postal</label>
+                                                        </div>
+                                                        <div class="mb-4 form-floating" >
+                                                            <input type="text" class="form-control" id="signup-city" required>
+                                                            <label for="signup-city">Ville</label>
+                                                        </div>
+                                                        <div class="mb-4 form-floating" >
+                                                            <input type="text" class="form-control" id="signup-country" required>
+                                                            <label for="signup-country">Pays</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-12">
+                                                        <h6 class="mb-4">Authentification</h6>
+                                                        <div class="mb-4 form-floating" >
+                                                            <input type="email" class="form-control" id="signup-email" required>
+                                                            <label for="signup-email">email</label>
+                                                        </div>
+                                                        <div class="form-floating mb-4">
+                                                            <input type="password" class="form-control" id="signup-password" required>
+                                                            <label for="signup-password">Mot de passe</label>
+                                                        </div>
+                                                        <div class="form-floating mb-4">
+                                                            <input type="password" class="form-control" id="signup-password-copy" required>
+                                                            <label for="signup-password-copy">Ressaisisez votre mot de passe</label>
+                                                        </div>
+                                                        <span class="fst-italic fs-6">Le mot de passe doit: </span>
+                                                        <ul class="fst-italic fs-6">
+                                                            <li ><span id="signup-error-char-length">comporter au moins 8 caractères.</span></li>
+                                                            <li ><span id="signup-error-char-lower-upper">contenir au moins une lettre majuscule et minuscule (A-Za-z).</span></li>
+                                                            <li ><span id="signup-error-char-number">contenir au moins un chiffre (0-9).</span></li>
+                                                            <li ><span id="signup-error-char-special">contenir au moins un caractère spécial (par ex. !@#$%&*?).</span></li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <button id="signup-submit" class="btn btn-outline-primary mb-3">Envoyer</button>
+                                                        <div class="d-flex flex-wrap justify-content-md-between">
+                                                            <button class="btn btn-link" data-bs-target="#formCarousel" data-bs-slide="prev">
+                                                                <i class="bi bi-arrow-bar-left"></i>
+                                                                Se connecter
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -213,8 +241,9 @@
                                 </div>
 
 
-                            </div>
-                            <div class="col-6 wallpaper"></div>
+<!--                            </div>-->
+<!--                            <div class="col-6 wallpaper"></div>-->
+                        </div>
                         </div>
 
                     </div>

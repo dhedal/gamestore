@@ -1,4 +1,5 @@
 import {router} from "./routes/router.js";
+import {SigninForm, SignupForm} from "./forms/forms.js";
 
 export class AppMenu {
     classActive;
@@ -63,4 +64,19 @@ export class AppMenu {
         this.linkActive = null;
     }
 }
+
+class App{
+    constructor() {
+    }
+
+    run() {
+        router.loadPage().then(() => {
+            const appMenu = new AppMenu();
+            const signin = new SigninForm();
+            const signup = new SignupForm();
+        });
+    }
+}
+
+export const app = new App();
 

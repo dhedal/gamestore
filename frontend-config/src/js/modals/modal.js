@@ -1,5 +1,7 @@
 import {CartGameTemplate} from "../templates/templates.js";
 import {CartService} from "../services/cart-service.js";
+import {SigninForm, SignupForm} from "../forms/forms.js";
+import {Modal} from "bootstrap";
 
 
 export class CartModal {
@@ -72,6 +74,18 @@ export class CartModal {
         [prices, promoPrices, total] = CartService.getFacture();
         totalTag.textContent = total;
     }
+}
+
+export class AuthenticationModal {
+    modalElement;
+
+    constructor(elementId = "modal-authentication") {
+        this.modalElement = document.getElementById(elementId);
+
+    }
 
 
+    // close() {
+    //     Modal.getInstance(this.modalElement).hide();
+    // }
 }
