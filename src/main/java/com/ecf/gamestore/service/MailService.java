@@ -27,6 +27,8 @@ public class MailService {
     private  String emailForTest;
     @Value("${gs.api.link.reset-password}")
     private String resetPasswordUrl;
+    @Value("${GS_SITE_LINK_HOME}")
+    private String homeLink;
 
     private final JavaMailSender mailSender;
 
@@ -35,7 +37,14 @@ public class MailService {
         this.mailSender = mailSender;
     }
 
-    public boolean sendOrderConfirmationEmail (Order order) throws MessagingException {
+
+    /**
+     *
+     * @param order
+     * @return boolean
+     */
+    public boolean sendOrderConfirmationEmail (Order order){
+        LOG.debug("## sendOrderConfirmationEmail (Order order)");
         if(Objects.isNull(order)) return false;
         GSUser user = order.getUser();
         List<OrderLine> orderLines = order.getOrderLines();
@@ -72,7 +81,6 @@ public class MailService {
 
         double sousTotal = totalPrix - totalReduction;
 
-        LOG.debug("## sendConfirmationRegistrationMessage");
         try {
             String subject = "Confirmation de votre commande - GameStore";
             String text = """
@@ -122,6 +130,44 @@ public class MailService {
             LOG.error("Failed to send email: " + e.getMessage());
             return false;
         }
+    }
+
+    public boolean sendSignupConfirmation(GSUser user) {
+        LOG.debug("## sendSignupConfirmation(GSUser user)");
+        if(Objects.isNull(user)) return false;
+
+        try {
+            String subject = "Confirmation de création de compte GameStore";
+            String text = """
+                                    
+            Bonjour %s,
+                                                       
+            Nous sommes ravis de vous accueillir sur GameStore !
+            
+            Votre compte a été créé avec succès. 
+            Vous pouvez désormais accéder à votre espace personnel et profiter de nos services. 
+            Pour vous connecter, utilisez simplement votre adresse email et le mot de passe que 
+            vous avez défini lors de l'inscription.
+            
+            Aller sur GameStore : %s
+                     
+            Cordialement,
+            L'équipe GameStore    
+            """.formatted(
+            user.getFirstName(), this.homeLink);
+            MimeMessage message = this.mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(this.emailForTest);
+            helper.setSubject(subject);
+            helper.setText(text);
+
+            this.mailSender.send(message);
+            return true;
+        } catch (MailException | MessagingException e) {
+            LOG.error("Failed to send email: " + e.getMessage());
+            return false;
+        }
+
     }
 
 }

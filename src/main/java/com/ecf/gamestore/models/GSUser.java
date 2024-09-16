@@ -1,5 +1,6 @@
 package com.ecf.gamestore.models;
 
+import com.ecf.gamestore.models.embeddables.Address;
 import com.ecf.gamestore.models.enumerations.Role;
 import com.ecf.gamestore.models.interfaces.IEntity;
 import jakarta.persistence.*;
@@ -25,6 +26,8 @@ public class GSUser implements IEntity {
     private String password;
     @Column(nullable = false)
     private Role role;
+    @Embedded
+    private Address address;
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -83,6 +86,14 @@ public class GSUser implements IEntity {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public LocalDateTime getCreatedAt() {
