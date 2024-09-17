@@ -1,7 +1,7 @@
 import {CartGameTemplate} from "../templates/templates.js";
 import {CartService} from "../services/cart-service.js";
-import {SigninForm, SignupForm} from "../forms/forms.js";
-import {Modal} from "bootstrap";
+import { Modal } from 'bootstrap';
+
 
 
 export class CartModal {
@@ -78,14 +78,22 @@ export class CartModal {
 
 export class AuthenticationModal {
     modalElement;
+    modalInstance;
 
-    constructor(elementId = "modal-authentication") {
+    constructor(elementId = "authentication-modal") {
         this.modalElement = document.getElementById(elementId);
-
+        if (this.modalElement) {
+            this.modalInstance = new Modal(this.modalElement);
+        } else {
+            console.error(`Element with ID ${elementId} not found.`);
+        }
     }
 
-
-    // close() {
-    //     Modal.getInstance(this.modalElement).hide();
-    // }
+    close() {
+        if (this.modalInstance) {
+            this.modalInstance.hide();
+        } else {
+            console.error("Modal instance is not available.");
+        }
+    }
 }

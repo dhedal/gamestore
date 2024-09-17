@@ -1,10 +1,10 @@
 
 
 class AppContext {
+    appMenu;
     currentPage
 
     constructor() {
-
     }
 
     set currentPage( currentPage){
@@ -13,6 +13,7 @@ class AppContext {
 
     refresh() {
         this.currentPage.refresh();
+        if(this.appMenu) this.appMenu.checkAuthData();
     }
 }
 

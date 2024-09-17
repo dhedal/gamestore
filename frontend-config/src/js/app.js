@@ -1,5 +1,7 @@
 import {router} from "./routes/router.js";
 import {SigninForm, SignupForm} from "./forms/forms.js";
+import {AuthenticationService} from "./services/authentication-service";
+import {appContext} from "./config/app-context";
 
 export class AppMenu {
     classActive;
@@ -8,6 +10,8 @@ export class AppMenu {
     cartLink;
     linkActive;
     loginBtn;
+    workSpaceLink;
+    userSpaceLink;
 
     constructor() {
         this.classActive = ["border", "rounded"];
@@ -21,8 +25,32 @@ export class AppMenu {
         this.homeLink = document.getElementById("app-menu-home-link");
         this.cartLink = document.getElementById("app-menu-cart-link");
         this.loginBtn = document.getElementById("loginBtn");
+        this.workSpaceLink = document.getElementById("gs-team-workspace");
+        this.userSpaceLink = document.getElementById("user-space");
+
+        this.checkAuthData();
 
         this.initEvent();
+
+    }
+
+    checkAuthData() {
+        if(AuthenticationService.isConnected()){
+            this.loginBtn.classList.add("visually-hidden");
+            this.userSpaceLink.classList.remove("visually-hidden");
+
+            if(AuthenticationService.isEmployee()) {
+                this.workSpaceLink.classList.remove("visually-hidden");
+            }
+            else {
+                this.workSpaceLink.classList.add("visually-hidden");
+            }
+        }
+        else {
+            this.loginBtn.classList.remove("visually-hidden");
+            this.workSpaceLink.classList.add("visually-hidden");
+            this.userSpaceLink.classList.add("visually-hidden");
+        }
     }
 
     initEvent() {
@@ -56,6 +84,15 @@ export class AppMenu {
             this.resetLinkActive();
         });
 
+        this.workSpaceLink.addEventListener("click", event => {
+            this.resetLinkActive();
+        });
+
+        this.userSpaceLink.addEventListener("click", event => {
+            this.resetLinkActive();
+        });
+
+
     }
 
     resetLinkActive() {
@@ -74,6 +111,7 @@ class App{
             const appMenu = new AppMenu();
             const signin = new SigninForm();
             const signup = new SignupForm();
+            appContext.appMenu = appMenu;
         });
     }
 }

@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +28,21 @@ public class AuthenticationService {
     private MailService mailService;
     private Validator validator;
     private final BCryptPasswordEncoder passwordEncoder;
+    private JwtService jwtService;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     public AuthenticationService(
             @Lazy GSUserService gsUserService,
             MailService mailService,
+            AuthenticationManager authenticationManager,
+            JwtService jwtService,
             Validator validator,
             BCryptPasswordEncoder  passwordEncoder){
         this.gsUserService = gsUserService;
         this.mailService = mailService;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
         this.validator = validator;
         this.passwordEncoder = passwordEncoder;
     }
@@ -64,19 +71,35 @@ public class AuthenticationService {
             return response;
         }
 
-        GSUser user = this.gsUserService.getByEmail(request.getEmail());
-
-       if(Objects.isNull(user)) {
-           response.addMessage("L'email est introuvable.");
-           return response;
-        }
-
-        if(!this.passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            response.addMessage("le mot de passe ne correspond pas.");
+        try {
+            this.authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+            GSUser user = this.gsUserService.getByEmail(request.getEmail());
+            if(Objects.nonNull(user)) {
+                response.setUser(GSUserMapper.toDTO(user));
+                response.setToken(this.jwtService.generateToken(user));
+                response.setExpiresIn(this.jwtService.getJwtExpiration());
+            }
+        } catch (BadCredentialsException e) {
+            response.addMessage("Échec de l'authentification : Mauvais identifiants");
+            return response;
+        } catch (LockedException e) {
+            response.addMessage("Échec de l'authentification : Le compte est verrouillé");
+            return response;
+        } catch (DisabledException e) {
+            response.addMessage("Échec de l'authentification : Le compte est désactivé");
+            return response;
+        } catch (AccountExpiredException e) {
+            response.addMessage("Échec de l'authentification : Le compte a expiré");
+            return response;
+        } catch (CredentialsExpiredException e) {
+            response.addMessage("Échec de l'authentification : Les informations d'identification ont expiré");
+            return response;
+        } catch (Exception e) {
+            response.addMessage("Échec de l'authentification : " + e.getMessage());
             return response;
         }
 
-        response.setUser(GSUserMapper.toDTO(user));
         return response;
     }
 

@@ -1,3 +1,9 @@
+import {AuthenticationService} from "../services/authentication-service.js";
+import {MessageUtils} from "../utils/message-utils.js";
+import {appContext} from "../config/app-context.js";
+import {AuthenticationModal} from "../modals/modal.js";
+
+
 class Validator {
 
     static validateInputRequired = (input) => {
@@ -101,7 +107,7 @@ class Form {
         this._submit.addEventListener("click", event => {
             event.preventDefault();
             event.stopPropagation();
-            console.log(this._extractData());
+            this.send(this._extractData());
         });
     }
 
@@ -134,6 +140,9 @@ class Form {
         return data;
     }
 
+    send(data) {
+    }
+
     _clearValidOrInvalidCSS = (element) => {
         if(element.classList.contains("is-valid")) {
             element.classList.remove("is-valid");
@@ -160,12 +169,49 @@ class Form {
 export class SigninForm extends Form{
     email;
     password;
+    authModal;
 
     constructor(formElement = "signin-form") {
         super(formElement, "signin-submit");
 
         this.email = this._addInputs("signin-email", "keyup", Validator.validateEmail);
         this.password = this._addInputs("signin-password", "keyup", Validator.validatePassword);
+        this.authModal = new AuthenticationModal();
+    }
+
+    send(data) {
+        if(!data) return
+
+        const signinData = {
+            email: data.get(this.email),
+            password: data.get(this.password)
+        };
+
+        console.log(signinData);
+
+        AuthenticationService.postSignin(signinData).then(response => {
+           console.log(response);
+
+           if(response.user && response.token) {
+               const authData = {
+                   user: response.user,
+                   token: response.token,
+                   expiresIn: response.expiresIn
+               }
+               AuthenticationService.setAuthData(authData);
+               this.clear();
+               this.authModal.close();
+               appContext.refresh();
+           }
+           else if(response.messages) {
+               const messages = Array.from(response.messages);
+               messages.forEach(message => {
+                   MessageUtils.show(message);
+               });
+           }
+
+        });
+
     }
 }
 

@@ -97,7 +97,7 @@ public class AuthenticationServiceTest {
         request.setPassword("GS2++test3++");
         List<String> tests = new ArrayList<>();
 
-        tests.add("L'email est introuvable.");
+        tests.add("Échec de l'authentification : Mauvais identifiants");
         SigninResponse response = this.signinResponseTest(this.authenticationService.authentication(request, new SigninResponse()), tests);
     }
 
@@ -108,7 +108,7 @@ public class AuthenticationServiceTest {
         request.setPassword("GS2++test3++");
         List<String> tests = new ArrayList<>();
 
-        tests.add("le mot de passe ne correspond pas.");
+        tests.add("Échec de l'authentification : Mauvais identifiants");
         SigninResponse response = this.signinResponseTest(this.authenticationService.authentication(request, new SigninResponse()), tests);
     }
 

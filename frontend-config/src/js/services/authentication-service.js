@@ -19,9 +19,9 @@ export class AuthenticationService {
         return await response.json();
     }
 
-    static postSignin = async (authData) => {
+    static postSignin = async (requestData) => {
         const parameters = AuthenticationService.httpHeader("POST");
-        parameters.body = JSON.stringify(authData);
+        parameters.body = JSON.stringify(requestData);
         const response = await fetch(`${API_AUTH_URL}/signin`, parameters);
         return await response.json();
     }
@@ -42,14 +42,13 @@ export class AuthenticationService {
 
     static getUser() {
         // TODO: mettre en place JWT
-        // const authData = AuthenticationService.getAuthData();
-        // return authData ? authData.user : null;
-        return {uuid: "uuid-fake"};
+        const authData = AuthenticationService.getAuthData();
+        return authData ? authData.user : null;
     }
 
     static getRole() {
         const user = AuthenticationService.getUser();
-        return user ? user.rule.label : null;
+        return user ? user.role.label : null;
     }
 
     static getToken() {
@@ -62,10 +61,8 @@ export class AuthenticationService {
     }
 
     static isConnected() {
-        // TODO: mettre en place JWT
-        // const token = AuthenticationService.getToken();
-        // return token != null && token.length > 1;
-        return true;
+        const token = AuthenticationService.getToken();
+        return token != null && token.length > 1;
     }
 
     static httpHeader(method, withAuthorization = false) {
@@ -90,6 +87,7 @@ export class AuthenticationService {
     }
 
     static isEmployee() {
-        return AuthenticationService.getRole() === "employee";
+        const role = AuthenticationService.getRole();
+        return role === "employee" || role === "admin";
     }
 }

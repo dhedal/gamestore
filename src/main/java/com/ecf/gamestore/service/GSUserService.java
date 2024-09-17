@@ -27,7 +27,7 @@ public class GSUserService extends AbstractService<GSUserRepository, GSUser> {
     public GSUser getByEmail(String email) {
         LOG.debug("## getByEmail(String email)");
         if(!StringUtils.hasText(email)) return null;
-        return this.repository.findByEmail(email);
+        return this.repository.findByEmail(email).orElse(null);
 
     }
 

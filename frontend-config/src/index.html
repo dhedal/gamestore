@@ -36,9 +36,15 @@
                             <a id="app-menu-cart-link" href="/cart" class="btn btn-outline-secondary me-2 fs-4">
                                 <i class="bi bi-cart4"></i>
                             </a>
-                            <button id="loginBtn" type="button" class="btn btn-outline-secondary fs-4" data-bs-target="#authentication-modal" data-bs-toggle="modal" >
+                            <button id="loginBtn" type="button" class="btn btn-outline-secondary me-2 fs-4" data-bs-target="#authentication-modal" data-bs-toggle="modal" >
                                 <i class="bi bi-person-circle"></i>
                             </button>
+                            <a id="user-space" type="button" class="btn btn-outline-success me-2 fs-4 visually-hidden">
+                                <i class="bi bi-person-gear"></i>
+                            </a>
+                            <a id="gs-team-workspace" type="button" class="btn btn-outline-warning fs-4 visually-hidden" >
+                                <i class="bi bi-person-workspace"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -49,6 +55,9 @@
         <main id="main-page"></main>
 
         <!-- <footer><h1>FOOTER</h1></footer> -->
+
+        <!--TOAST -->
+        <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 
         <!--TEMPLATES -->
         <template id="game-template">
@@ -135,7 +144,7 @@
                                         <div class="carousel-item active">
                                             <!--      SIGNIN CAROUSEL ITEM -->
                                             <div class="row">
-                                                <div class="col-6">
+                                                <div class="col-12">
                                                     <form class="signin-form">
                                                         <h4 class="mb-4">Se connecter</h4>
                                                         <div class="mb-4 form-floating" >
