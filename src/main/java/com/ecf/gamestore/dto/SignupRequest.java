@@ -1,9 +1,8 @@
 package com.ecf.gamestore.dto;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import com.ecf.gamestore.models.enumerations.Role;
+
+import javax.validation.constraints.*;
 import java.util.Objects;
 
 public class SignupRequest {
@@ -14,7 +13,7 @@ public class SignupRequest {
     @Size(min = 3, max = 50, message = "le nom doit avoir entre 3 et 50 charactères")
     private String lastName;
     @NotBlank(message = "L'email' est obligatoire")
-    @Email( message="le format d'email est invalide. ex : xxxx@xxx.xxx")
+    @Email( regexp = ".+[@].+[\\.].+", message="le format d'email est invalide. ex : xxxx@xxx.xxx")
     private String email;
     @NotBlank(message = "Le mot de passe est obligatoire")
     @Size(min = 8, message = "Le mot de passe doit avoir au moins 8 caractères.")
@@ -24,7 +23,7 @@ public class SignupRequest {
     private String password;
     private Integer role;
     @NotBlank(message = "L'adresse est obligatoire")
-    @Size(max = 100, message = "l'adresse ne doit contenir pas plus de 100 charactères")
+    @Size(min=3, max = 100, message = "l'adresse ne doit contenir pas plus de 100 charactères")
     private String streetAddress;
     @NotBlank(message = "Le code postal est obligatoire")
     @Pattern(regexp = "^\\d{5}(-\\d{4})?$", message = "Le code postal doit comporter 5 chiffres ou être au format 5+4 (ex: 12345 ou 12345-6789).")
@@ -100,10 +99,11 @@ public class SignupRequest {
     }
 
     public Integer getRole() {
-        return Objects.isNull(role) ? Integer.valueOf(0) : this.role;
+        if(Objects.isNull(role)) this.setRole(null);
+        return this.role;
     }
 
     public void setRole(Integer role) {
-        this.role = role;
+        this.role = Objects.isNull(role) ? Role.USER.getKey() : Role.getByKey(role).getKey();
     }
 }

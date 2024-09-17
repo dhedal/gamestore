@@ -1,19 +1,9 @@
 package com.ecf.gamestore.controller;
 
-import com.ecf.gamestore.dto.GameArticleDTO;
-import com.ecf.gamestore.dto.GameFilterDTO;
-import com.ecf.gamestore.dto.OrderDTO;
-import com.ecf.gamestore.dto.ValidationOrderResponse;
-import com.ecf.gamestore.mapper.GameArticleMapper;
-import com.ecf.gamestore.models.GSUser;
-import com.ecf.gamestore.models.GameArticle;
-import com.ecf.gamestore.models.Order;
-import com.ecf.gamestore.models.Promotion;
-import com.ecf.gamestore.models.enumerations.GameGenre;
-import com.ecf.gamestore.models.enumerations.Platform;
+import com.ecf.gamestore.dto.OrderRequest;
+import com.ecf.gamestore.dto.OrderResponse;
 import com.ecf.gamestore.service.GSUserService;
 import com.ecf.gamestore.service.OrderService;
-import com.ecf.gamestore.utils.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 
 @Controller
@@ -46,16 +32,18 @@ public class OrderController {
     }
 
     @PostMapping(path="/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ValidationOrderResponse> register (@RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<OrderResponse> register (@RequestBody OrderRequest orderRequest) {
         LOG.debug("## register (@RequestBody OrderDTO orderDTO)");
-        ValidationOrderResponse response = new ValidationOrderResponse();
+        OrderResponse response = new OrderResponse();
         try {
-            LOG.debug(orderDTO.toString());
-            response = this.orderService.register(response, orderDTO);
+            LOG.debug(orderRequest.toString());
+            response = this.orderService.register(orderRequest, response);
         }catch (Exception e) {
             LOG.error(e.toString());
+            response.addMessage("Un problème est survenu, veuillez réessayer ultérieurement");
         } catch (Throwable e) {
             LOG.error(e.toString());
+            response.addMessage("Un problème est survenu, veuillez réessayer ultérieurement");
         }
         return ResponseEntity.ok(response);
     }

@@ -1,14 +1,14 @@
 package com.ecf.gamestore.validation;
 
-import com.ecf.gamestore.validation.constraint.UUIDConstraint;
+import com.ecf.gamestore.validation.constraint.ValidUUID;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.UUID;
 
-public class UUIDValidator implements ConstraintValidator<UUIDConstraint, String> {
+public class UUIDValidator implements ConstraintValidator<ValidUUID, String> {
     @Override
-    public void initialize(UUIDConstraint constraintAnnotation) {
+    public void initialize(ValidUUID constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
     }
 

@@ -36,6 +36,7 @@ public class GSUserMapper {
         address.setZipCode(request.getZipCode());
         address.setCity(request.getCity());
         address.setCountry(request.getCountry());
+        user.setAddress(address);
         return user;
     }
 }

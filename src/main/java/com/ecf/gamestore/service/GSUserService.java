@@ -25,12 +25,19 @@ public class GSUserService extends AbstractService<GSUserRepository, GSUser> {
      * @return
      */
     public GSUser getByEmail(String email) {
+        LOG.debug("## getByEmail(String email)");
         if(!StringUtils.hasText(email)) return null;
         return this.repository.findByEmail(email);
 
     }
 
     public boolean isEmailExist(String email) {
+        LOG.debug("## isEmailExist(String email) ");
         return Objects.nonNull(this.getByEmail(email));
+    }
+
+    public GSUser getByUuid(String uuid) {
+        LOG.debug("## getByUuid(String uuid)");
+        return this.repository.findByUuid(uuid);
     }
 }

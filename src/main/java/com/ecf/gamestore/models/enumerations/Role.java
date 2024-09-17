@@ -33,6 +33,6 @@ public enum Role {
         if(key == EMPLOYEE.key.intValue()) return EMPLOYEE;
         if(key == ADMIN.key.intValue()) return ADMIN;
         if(key == USER.key.intValue()) return USER;
-        return UNDEFINED;
+        return USER;
     }
 }

@@ -1,14 +1,15 @@
 package com.ecf.gamestore.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ValidationOrderResponse {
+public class OrderResponse {
 
     private String order;
     private boolean ok;
     private boolean emailSent;
 
-    private List<String> errors = List.of();
+    private List<String> messages = new ArrayList<>();
 
     public String getOrder() {
         return order;
@@ -34,15 +35,15 @@ public class ValidationOrderResponse {
         this.emailSent = emailSent;
     }
 
-    public List<String> getErrors() {
-        return errors;
+    public List<String> getMessages() {
+        return messages;
     }
 
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
+    public void setMessages(List<String> messages) {
+        this.messages = messages;
     }
 
     public void addMessage(String message){
-        this.errors.add(message);
+        this.messages.add(message);
     }
 }

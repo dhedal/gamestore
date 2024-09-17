@@ -1,7 +1,7 @@
 package com.ecf.gamestore.service;
 
-import com.ecf.gamestore.dto.OrderDTO;
-import com.ecf.gamestore.dto.ValidationOrderResponse;
+import com.ecf.gamestore.dto.OrderRequest;
+import com.ecf.gamestore.dto.OrderResponse;
 import com.ecf.gamestore.models.*;
 import com.ecf.gamestore.models.enumerations.OrderStatus;
 import com.ecf.gamestore.repository.OrderRepository;
@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,6 +29,7 @@ public class OrderService extends AbstractService<OrderRepository, Order>{
     private AgenceService agenceService;
     private GSUserService gsUserService;
     private MailService mailService;
+    private Validator validator;
 
     @Autowired
     public OrderService(
@@ -36,7 +39,8 @@ public class OrderService extends AbstractService<OrderRepository, Order>{
             @Lazy PromotionService promotionService,
             @Lazy AgenceService agenceService,
             @Lazy GSUserService gsUserService,
-            @Lazy MailService mailService){
+            @Lazy MailService mailService,
+            @Lazy Validator validator){
         super(repository);
         this.orderLineService = orderLineService;
         this.gameArticleService = gameArticleService;
@@ -44,41 +48,62 @@ public class OrderService extends AbstractService<OrderRepository, Order>{
         this.agenceService = agenceService;
         this.gsUserService = gsUserService;
         this.mailService = mailService;
+        this.validator = validator;
     }
 
-    public ValidationOrderResponse register(ValidationOrderResponse response, OrderDTO orderDTO) throws Throwable {
-        LOG.debug("## register(ValidationOrderResponse response, OrderDTO orderDTO)");
-        if(Objects.isNull(orderDTO) || !orderDTO.isValid()) {
-            response.addMessage("orderDto non valide");
-            return response;
-        };
+    public OrderResponse register(OrderRequest request, OrderResponse response){
+        LOG.debug("## register(OrderRequest request, OrderResponse response)");
 
-        GSUser user = this.gsUserService.findById(Long.valueOf(1L));
+        if(Objects.isNull(request)) {
+            throw new IllegalArgumentException("OrderRequest ne doit pas être null");
+        }
+
+        if(Objects.isNull(response)) {
+            throw new IllegalArgumentException("OrderResponse ne doit pas être null");
+        }
+
+        Set<ConstraintViolation<OrderRequest>> violations = this.validator.validate(request);
+        if(!violations.isEmpty()) {
+            for(ConstraintViolation<OrderRequest> violation : violations) {
+                response.addMessage(violation.getMessage());
+            }
+            return response;
+        }
+
+        GSUser user = this.gsUserService.getByUuid(request.getUser());
         if(Objects.isNull(user)){
             response.addMessage("l'utilisateur est introuvable");
             return response;
         }
 
-        Agence agence = this.agenceService.findByUuid(orderDTO.getAgence());
+        Agence agence = this.agenceService.findByUuid(request.getAgence());
         if(Objects.isNull(agence)){
             response.addMessage("l'agence est introuvable");
             return response;
         }
 
-        List<GameArticle> gameArticles = this.gameArticleService.getGameArticles(orderDTO.getUuids());
+        List<GameArticle> gameArticles = this.gameArticleService.getGameArticles(request.getUuids());
         if(CollectionUtils.isNullOrEmpty(gameArticles)){
             response.addMessage("les articles sont introuvables");
             return response;
         }
 
-        List<String> uuidsList = gameArticles.stream()
-                .filter(gameArticle -> gameArticle.getStock().intValue() <= 0)
-                .map(GameArticle::getUuid)
-                .collect(Collectors.toList());
-        if(!CollectionUtils.isNullOrEmpty(uuidsList)){
-            response.addMessage("un des articles est en rupture de stock, veuillez rafraîchir la page pour afficher le stock à jour");
-            return response;
+        List<String> uuidsList = new ArrayList<>();
+        for(GameArticle article : gameArticles) {
+            if(article.getStock().intValue() <= 0) {
+                response.addMessage("un des articles est en rupture de stock, veuillez rafraîchir la page pour afficher le stock à jour");
+                return response;
+            }
+
+            int quantity = request.getArticles().get(article.getUuid());
+            if(article.getStock().intValue() < quantity) {
+                response.addMessage("La quantité d'un des articles est supérieur au stock, veuillez rafraîchir la page pour afficher le stock à jour");
+                return response;
+            }
+            uuidsList.add(article.getUuid());
         }
+
+
 
         List<Promotion> promotions = this.promotionService.getPromotions(gameArticles);
         Map<Long, Promotion> promotionMap = new HashMap<>();
@@ -89,7 +114,7 @@ public class OrderService extends AbstractService<OrderRepository, Order>{
         final Order order = new Order();
         order.setUser(user);
         order.setAgence(agence);
-        order.setPickupDate(orderDTO.getDate());
+        order.setPickupDate(request.getDate());
         order.setStatus(OrderStatus.VALIDATED);
         this.save(order);
         response.setOrder(order.getUuid());
@@ -101,7 +126,7 @@ public class OrderService extends AbstractService<OrderRepository, Order>{
                     orderLine.setCreatedAt(LocalDateTime.now());
                     orderLine.setOrder(order);
                     orderLine.setGameArticle(gameArticle);
-                    orderLine.setQuantity(orderDTO.getArticles().get(gameArticle.getUuid()));
+                    orderLine.setQuantity(request.getArticles().get(gameArticle.getUuid()));
                     if(promotionMap.containsKey(gameArticle.getId())){
                         orderLine.setPromotion(promotionMap.get(gameArticle.getId()));
                     }
@@ -112,7 +137,6 @@ public class OrderService extends AbstractService<OrderRepository, Order>{
         Order newOrder = this.save(order);
 
         this.updateStock(newOrder);
-
 
         response.setOk(true);
         response.setEmailSent(this.mailService.sendOrderConfirmationEmail(newOrder));

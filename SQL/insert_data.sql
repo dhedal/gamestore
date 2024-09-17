@@ -68,7 +68,7 @@ insert into agence (id, uuid, name, address, code_postal, city, country, latitud
 (4, uuid(), "GameStore", "1 rue du jeux vidéo", 75010, "Paris", "France", 48.8809, 2.3553, now()),
 (5, uuid(), "GameStore", "1 rue du jeux vidéo", 31000, "Toulouse", "France",  43.6119, 1.4546, now());
 
-insert into user (id, uuid, first_name, last_name, email, password, role, created_at) values
-(1, uuid(), "admin", "admin", "admin@email.gs.com", "ECF++2test++3", 3, now()),
-(2, uuid(), "employee", "employee", "employee@email.gs.com", "ECF++2test++3", 2, now()),
-(3, uuid(), "user", "user", "user@email.gs.com", "ECF++2test++3", 1, now());
+insert into user (id, uuid, first_name, last_name, email, password, role, street_address, zip_code, city, country, created_at) values
+(1, uuid(), "admin", "admin", "admin@email.gs.com", "$2a$10$XpEVbpjUW2Lutrsaj8mEeO9iwxvRJNokWu1FBLTvCDUpA3/fnvHyq", 3, "1 bd voltaire", "75011", "Paris", "France",now()),
+(2, uuid(), "employee", "employee", "employee@email.gs.com", "$2a$10$XpEVbpjUW2Lutrsaj8mEeO9iwxvRJNokWu1FBLTvCDUpA3/fnvHyq", 2, "2 bd voltaire", "75011", "Paris", "France",now()),
+(3, uuid(), "user", "user", "user@email.gs.com", "$2a$10$XpEVbpjUW2Lutrsaj8mEeO9iwxvRJNokWu1FBLTvCDUpA3/fnvHyq", 1, "3 bd voltaire", "75011", "Paris", "France",now());
