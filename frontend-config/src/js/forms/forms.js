@@ -141,7 +141,7 @@ class Form {
         return data;
     }
 
-    send(data) {
+    async send(data) {
     }
 
     _clearValidOrInvalidCSS = (element) => {
@@ -180,7 +180,7 @@ export class SigninForm extends Form{
         this.authModal = new AuthenticationModal();
     }
 
-    send(data) {
+    async send(data) {
         if(!data) return
 
         const signinData = {
@@ -190,26 +190,26 @@ export class SigninForm extends Form{
 
         console.log(signinData);
 
-        AuthenticationService.postSignin(signinData).then(response => {
-           console.log(response);
+        AuthenticationService.postSignin(signinData).then(async response => {
+            console.log(response);
 
-           if(response.user && response.token) {
-               const authData = {
-                   user: response.user,
-                   token: response.token,
-                   expiresIn: response.expiresIn
-               }
-               AuthenticationService.setAuthData(authData);
-               this.clear();
-               this.authModal.close();
-               appContext.refresh();
-           }
-           else if(response.messages) {
-               const messages = Array.from(response.messages);
-               messages.forEach(message => {
-                   MessageUtils.danger(message);
-               });
-           }
+            if (response.user && response.token) {
+                const authData = {
+                    user: response.user,
+                    token: response.token,
+                    expiresIn: response.expiresIn
+                }
+                AuthenticationService.setAuthData(authData);
+                this.clear();
+                await appContext.refresh();
+                this.authModal.close();
+
+            } else if (response.messages) {
+                const messages = Array.from(response.messages);
+                messages.forEach(message => {
+                    MessageUtils.danger(message);
+                });
+            }
 
         });
 
@@ -318,7 +318,7 @@ export class SignupForm extends Form {
         this.clearColorMessage(this.charSpecialError);
     }
 
-    send(data) {
+    async send(data) {
         if(!data) return;
 
         const signupData = {

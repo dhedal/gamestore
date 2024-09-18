@@ -15,7 +15,6 @@ export class PageComponent {
         this._name = name;
         this._pathHtml = pathHtml;
         this._pathJS = pathJs;
-        appContext.currentPage = this;
     }
 
     get url() { return this._url;}

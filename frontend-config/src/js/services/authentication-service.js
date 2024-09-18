@@ -32,6 +32,7 @@ export class AuthenticationService {
     }
 
     static setAuthData(authData) {
+        if(authData == null) return;
         localStorage.setItem(AuthenticationService.AUTH_DATA_KEY, JSON.stringify(authData));
     }
 
@@ -57,7 +58,7 @@ export class AuthenticationService {
     }
 
     static logout() {
-        AuthenticationService.setAuthData(null);
+       localStorage.removeItem(AuthenticationService.AUTH_DATA_KEY);
     }
 
     static isConnected() {

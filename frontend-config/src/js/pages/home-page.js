@@ -36,7 +36,7 @@ export class HomePage extends PageComponent {
         this.cartModal = new CartModal();
     }
 
-    ready() {
+    async ready() {
         this.appendGameMapToContainer(this.lastGamesContainer, this.dataLastGameMap);
         this.appendGameMapToContainer(this.currentPromotionsContainer, this.dataCurrentPromotionMap);
     }
@@ -53,8 +53,8 @@ export class HomePage extends PageComponent {
     }
 
     async refresh() {
-        this.appendGameMapToContainer(this.lastGamesContainer, this.dataLastGameMap);
-        this.appendGameMapToContainer(this.currentPromotionsContainer, this.dataCurrentPromotionMap);
+        console.log("## home-page ## refresh");
+        await this.ready();
     }
 
 }

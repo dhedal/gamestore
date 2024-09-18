@@ -12,6 +12,7 @@ export class AppMenu {
     loginBtn;
     workSpaceLink;
     userSpaceLink;
+    logOutBtn;
 
     constructor() {
         this.classActive = ["border", "rounded"];
@@ -27,6 +28,7 @@ export class AppMenu {
         this.loginBtn = document.getElementById("loginBtn");
         this.workSpaceLink = document.getElementById("gs-team-workspace");
         this.userSpaceLink = document.getElementById("user-space");
+        this.logOutBtn = document.getElementById("logOutBtn");
 
         this.checkAuthData();
 
@@ -38,6 +40,8 @@ export class AppMenu {
         if(AuthenticationService.isConnected()){
             this.loginBtn.classList.add("visually-hidden");
             this.userSpaceLink.classList.remove("visually-hidden");
+            this.logOutBtn.classList.remove("visually-hidden");
+            this.cartLink.classList.remove("visually-hidden");
 
             if(AuthenticationService.isEmployee()) {
                 this.workSpaceLink.classList.remove("visually-hidden");
@@ -50,6 +54,8 @@ export class AppMenu {
             this.loginBtn.classList.remove("visually-hidden");
             this.workSpaceLink.classList.add("visually-hidden");
             this.userSpaceLink.classList.add("visually-hidden");
+            this.logOutBtn.classList.add("visually-hidden");
+            this.cartLink.classList.add("visually-hidden");
         }
     }
 
@@ -84,12 +90,25 @@ export class AppMenu {
             this.resetLinkActive();
         });
 
+        this.logOutBtn.addEventListener("click", event => {
+            this.resetLinkActive();
+            AuthenticationService.logout();
+            event.target.href = "/home";
+            window.route(event);
+        });
+
         this.workSpaceLink.addEventListener("click", event => {
+            event.preventDefault();
+            event.stopPropagation();
             this.resetLinkActive();
         });
 
         this.userSpaceLink.addEventListener("click", event => {
+            event.preventDefault();
+            event.stopPropagation();
             this.resetLinkActive();
+            event.target.href = "/user-space";
+            window.route(event);
         });
 
 
@@ -107,11 +126,10 @@ class App{
     }
 
     run() {
+        appContext.appMenu = new AppMenu();
         router.loadPage().then(() => {
-            const appMenu = new AppMenu();
             const signin = new SigninForm();
             const signup = new SignupForm();
-            appContext.appMenu = appMenu;
         });
     }
 }

@@ -4,6 +4,8 @@ import {GameListPage} from "../pages/game-list-page.js";
 import {cache} from "../config/cache.js";
 import {GameDetailPage} from "../pages/game-detail-page.js";
 import {CartPage} from "../pages/cart-page.js";
+import {UserSpacePage} from "../pages/user-space-page.js";
+import {appContext} from "../config/app-context";
 
 export const WEBSITE_NAME = "GameStore";
 
@@ -16,6 +18,7 @@ class Router {
         this._addPage(new GameListPage());
         this._addPage(new GameDetailPage());
         this._addPage(new CartPage());
+        this._addPage(new UserSpacePage());
         this._addPage(new Page404());
         this.init();
     }
@@ -46,7 +49,9 @@ class Router {
      */
     async loadPage() {
         await cache.check();
+        appContext.appMenu.checkAuthData();
         const page = this.getPage(window.location.pathname);
+        appContext.currentPage = page;
         await page._init();
         await page._onLoaded();
 

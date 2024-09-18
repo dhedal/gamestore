@@ -1,8 +1,10 @@
 
+import {AppMenu} from "../app.js";
+
 
 class AppContext {
     appMenu;
-    currentPage
+    currentPage;
 
     constructor() {
     }
@@ -11,9 +13,11 @@ class AppContext {
         if(currentPage) this.currentPage = currentPage;
     }
 
-    refresh() {
-        this.currentPage.refresh();
+    async refresh() {
         if(this.appMenu) this.appMenu.checkAuthData();
+        console.log(this.currentPage);
+        await this.currentPage.refresh();
+
     }
 }
 
