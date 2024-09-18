@@ -2,6 +2,7 @@ import {AuthenticationService} from "../services/authentication-service.js";
 import {MessageUtils} from "../utils/message-utils.js";
 import {appContext} from "../config/app-context.js";
 import {AuthenticationModal} from "../modals/modal.js";
+import {Carousel} from "bootstrap";
 
 
 class Validator {
@@ -206,7 +207,7 @@ export class SigninForm extends Form{
            else if(response.messages) {
                const messages = Array.from(response.messages);
                messages.forEach(message => {
-                   MessageUtils.show(message);
+                   MessageUtils.danger(message);
                });
            }
 
@@ -315,5 +316,46 @@ export class SignupForm extends Form {
         this.clearColorMessage(this.charLowerUpperError);
         this.clearColorMessage(this.charNumberError);
         this.clearColorMessage(this.charSpecialError);
+    }
+
+    send(data) {
+        if(!data) return;
+
+        const signupData = {
+            firstName: data.get(this.firstName),
+            lastName: data.get(this.lastName),
+            email: data.get(this.email),
+            password: data.get(this.password),
+            streetAddress: data.get(this.streetAddress),
+            zipCode: data.get(this.zipCode),
+            city: data.get(this.city),
+            country: data.get(this.country)
+        };
+
+        console.log(signupData);
+
+        AuthenticationService.postSignup(signupData).then(response => {
+            console.log(response);
+
+            if(response.ok) {
+                this.clear();
+                const carousel = new Carousel(document.getElementById("formCarousel"));
+                carousel.to(0);
+                MessageUtils.success("Votre compte a bien été enregistré");
+                if(response.emailSent) {
+                    MessageUtils.success("Un email de confirmation vous a été envoyé");
+                }
+
+
+            }
+            else{
+                const messages = Array.from(response.messages);
+                messages.forEach(message => {
+                    MessageUtils.danger(message);
+                });
+            }
+
+        });
+
     }
 }
