@@ -69,33 +69,15 @@ public class AuthenticationService {
             return response;
         }
 
-        try {
-            this.authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-            GSUser user = this.gsUserService.getByEmail(request.getEmail());
-            if(Objects.nonNull(user)) {
-                response.setUser(GSUserMapper.toDTO(user));
-                response.setToken(this.jwtService.generateToken(user));
-                response.setExpiresIn(this.jwtService.getJwtExpiration());
-            }
-        } catch (BadCredentialsException e) {
-            response.addMessage("Échec de l'authentification : Mauvais identifiants");
+        if(!this.checkAuthentication(request.getEmail(), request.getPassword(), response)) {
             return response;
-        } catch (LockedException e) {
-            response.addMessage("Échec de l'authentification : Le compte est verrouillé");
-            return response;
-        } catch (DisabledException e) {
-            response.addMessage("Échec de l'authentification : Le compte est désactivé");
-            return response;
-        } catch (AccountExpiredException e) {
-            response.addMessage("Échec de l'authentification : Le compte a expiré");
-            return response;
-        } catch (CredentialsExpiredException e) {
-            response.addMessage("Échec de l'authentification : Les informations d'identification ont expiré");
-            return response;
-        } catch (Exception e) {
-            response.addMessage("Échec de l'authentification : " + e.getMessage());
-            return response;
+        }
+
+        GSUser user = this.gsUserService.getByEmail(request.getEmail());
+        if(Objects.nonNull(user)) {
+            response.setUser(GSUserMapper.toDTO(user));
+            response.setToken(this.jwtService.generateToken(user));
+            response.setExpiresIn(this.jwtService.getJwtExpiration());
         }
 
         return response;
@@ -141,6 +123,76 @@ public class AuthenticationService {
         }
 
         return response;
+    }
+
+    public SigninResponse changePassword(ChangePasswordRequest request, SigninResponse response) {
+        LOG.debug("## changePassword(ChangePasswordRequest request, SigninResponse response)");
+
+        if(Objects.isNull(request)){
+            throw new IllegalArgumentException("ChangePasswordRequest ne doit pas être null");
+        }
+        if(Objects.isNull(response)){
+            throw new IllegalArgumentException("SigninResponse ne doit pas être null");
+        }
+
+        Set<ConstraintViolation<SigninRequest>> violations = this.validator.validate(request);
+        if(!violations.isEmpty()) {
+            for(ConstraintViolation<SigninRequest> violation : violations) {
+                response.addMessage(violation.getMessage());
+            }
+            return response;
+        }
+
+        if(!this.checkAuthentication(request.getEmail(), request.getPasswordOld(), response)) {
+            response.addMessage("Echec du changement de mot de passe, il y a un problème avec l'email ou l'ancien mot de passe");
+            return response;
+        }
+
+        GSUser user = this.gsUserService.getByEmail(request.getEmail());
+        if(Objects.isNull(user)) {
+            response.addMessage("L'utilisateur est introuvable");
+            return response;
+        }
+
+        user.setPassword(this.passwordEncoder.encode(request.getPassword()));
+        user = this.gsUserService.save(user);
+        if(!this.checkAuthentication(request.getEmail(), request.getPassword(), response)) {
+            response.addMessage("Il y un problème avec le nouveau mot de passe, faite le changement avec le mot passe oublié");
+            return response;
+        }
+
+        response.setUser(GSUserMapper.toDTO(user));
+        response.setToken(this.jwtService.generateToken(user));
+        response.setExpiresIn(this.jwtService.getJwtExpiration());
+
+        return response;
+    }
+
+
+    private boolean checkAuthentication(String email, String password, SigninResponse response) {
+        try {
+            this.authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(email, password));
+            return true;
+        } catch (BadCredentialsException e) {
+            response.addMessage("Échec de l'authentification : Mauvais identifiants");
+            return false;
+        } catch (LockedException e) {
+            response.addMessage("Échec de l'authentification : Le compte est verrouillé");
+            return false;
+        } catch (DisabledException e) {
+            response.addMessage("Échec de l'authentification : Le compte est désactivé");
+            return false;
+        } catch (AccountExpiredException e) {
+            response.addMessage("Échec de l'authentification : Le compte a expiré");
+            return false;
+        } catch (CredentialsExpiredException e) {
+            response.addMessage("Échec de l'authentification : Les informations d'identification ont expiré");
+            return false;
+        } catch (Exception e) {
+            response.addMessage("Échec de l'authentification : " + e.getMessage());
+            return false;
+        }
     }
 
 }

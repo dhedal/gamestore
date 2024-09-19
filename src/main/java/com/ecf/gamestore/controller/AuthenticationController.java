@@ -52,4 +52,17 @@ public class AuthenticationController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping(value = "/change-password", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<SigninResponse> changePassword(@RequestBody ChangePasswordRequest request) {
+        LOG.debug("## changePassword (ChangePasswordRequest request");
+        final SigninResponse response = new SigninResponse();
+        try {
+            this.authenticationService.changePassword(request, response);
+        } catch (Exception ex) {
+            LOG.error(ex.toString());
+            response.addMessage("Un problème est survenu, veuillez réessayer ultérieurement");
+        }
+        return ResponseEntity.ok(response);
+    }
+
 }

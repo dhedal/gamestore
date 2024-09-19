@@ -33,7 +33,7 @@
                         <div class="col-12">
                             <div class="input-group mb-3">
                                 <div class="input-group-text">
-                                    <input id="user-form-checkbox" class="form-check-input mt-0" type="checkbox" checked aria-label="Checkbox for following text input">
+                                    <input id="user-form-checkbox" class="form-check-input mt-0" type="checkbox" checked >
                                 </div>
                                 <span class="input-group-text">Modififier mes informations</span>
                             </div>
@@ -70,11 +70,12 @@
                                     <input type="text" class="form-control" id="modif-country" required disabled>
                                     <label for="modif-country">Pays</label>
                                 </div>
-                            </div>
-                        <div class="col-12">
-                            <button id="modif-submit" class="btn btn-outline-primary mb-3" disabled>Modifier</button>
+                                <div class="col-12">
+                                    <button id="modif-submit" class="btn btn-outline-primary mb-3" disabled>Modifier</button>
+                                </div>
+                            </form>
                         </div>
-                        </form>
+
                     </div>
                 </div>
 
@@ -82,34 +83,42 @@
 
                 <div class="tab-pane fade" id="password-pane" role="tabpanel" aria-labelledby="password-tab" tabindex="0">
                     <div class="row mt-5">
-                        <div class="col-12"></div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-text">
-                                <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
+                        <div class="col-12">
+                            <div class="input-group mb-3">
+                                <div class="input-group-text">
+                                    <input id="change-password-form-checkbox" class="form-check-input mt-0" type="checkbox" checked>
+                                </div>
+                                <span class="input-group-text">Changer de mot de passe</span>
                             </div>
-                            <span class="input-group-text">Changer de mot de passe</span>
                         </div>
                     </div>
                     <div class="col-12">
-                        <div class="form-floating mb-4">
-                            <input type="password" class="form-control" id="change-password" required>
-                            <label for="change-password">Mot de passe</label>
-                        </div>
-                        <div class="form-floating mb-4">
-                            <input type="password" class="form-control" id="change-password-copy" required>
-                            <label for="change-password-copy">Ressaisisez votre mot de passe</label>
-                        </div>
-                        <span class="fst-italic fs-6">Le mot de passe doit: </span>
-                        <ul class="fst-italic fs-6">
-                            <li ><span id="change-error-char-length">comporter au moins 8 caractères.</span></li>
-                            <li ><span id="change-error-char-lower-upper">contenir au moins une lettre majuscule et minuscule (A-Za-z).</span></li>
-                            <li ><span id="change-error-char-number">contenir au moins un chiffre (0-9).</span></li>
-                            <li ><span id="change-error-char-special">contenir au moins un caractère spécial (par ex. !@#$%&*?:+-).</span></li>
-                        </ul>
+                        <form id="change-password-form">
+                            <div class="form-floating mb-4">
+                                <input type="password" class="form-control" id="change-password-old" required disabled>
+                                <label for="change-password-old">Mot de passe</label>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <input type="password" class="form-control" id="change-password" required disabled>
+                                <label for="change-password">Mot de passe</label>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <input type="password" class="form-control" id="change-password-copy" required disabled>
+                                <label for="change-password-copy">Ressaisisez votre mot de passe</label>
+                            </div>
+                            <span class="fst-italic fs-6">Le mot de passe doit: </span>
+                            <ul class="fst-italic fs-6">
+                                <li ><span id="change-error-char-length">comporter au moins 8 caractères.</span></li>
+                                <li ><span id="change-error-char-lower-upper">contenir au moins une lettre majuscule et minuscule (A-Za-z).</span></li>
+                                <li ><span id="change-error-char-number">contenir au moins un chiffre (0-9).</span></li>
+                                <li ><span id="change-error-char-special">contenir au moins un caractère spécial (par ex. !@#$%&*?:+-).</span></li>
+                            </ul>
+                            <div class="col-12">
+                                <button id="change-password-submit" class="btn btn-outline-primary mb-3">Changer</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="col-12">
-                        <button id="change-submit" class="btn btn-outline-primary mb-3">Changer</button>
-                    </div>
+
                 </div>
             </div>
         </div>

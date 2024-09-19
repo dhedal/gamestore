@@ -478,6 +478,142 @@ export class UserModifyForm extends Form {
         if(this.user.address.country !== data.get(this.country)) return true;
         return false;
     }
+}
 
+export class ChangePasswordForm extends Form {
+    passwordOld;
+    password;
+    passwordCopy;
+    charLengthError;
+    charLowerUpperError;
+    charNumberError;
+    charSpecialError;
+    formCheckBox;
+
+    constructor(formElement = "change-password-form") {
+        super(formElement, "change-password-submit");
+
+        this.passwordOld = this._addInputs("change-password-old", "keyup", this.validatePassword.bind(this));
+        this.password = this._addInputs("change-password", "keyup", this.validatePassword.bind(this));
+        this.passwordCopy = this._addInputs("change-password-copy", "keyup", this.validatePasswordCopy.bind(this));
+
+        this.charLengthError = document.getElementById("change-error-char-length");
+        this.charLowerUpperError = document.getElementById("change-error-char-lower-upper");
+        this.charNumberError = document.getElementById("change-error-char-number");
+        this.charSpecialError = document.getElementById("change-error-char-special");
+
+        this.formCheckBox = document.getElementById("change-password-form-checkbox");
+        this.formCheckBox.addEventListener("change", event => {
+            this.fieldDisabled(this.formCheckBox.checked);
+        });
+    }
+
+    validatePassword(inputKey, input) {
+        const value = input.value;
+
+        const checkLength = Validator.validateStringLength(value);
+        this.colorMessage(this.charLengthError, checkLength);
+
+        const checkLowerUpper = Validator.validateStringContainsUpperAndLowerCase(value);
+        this.colorMessage(this.charLowerUpperError, checkLowerUpper);
+
+        const checkNumber = Validator.validateStringContainsCharNumber(value);
+        this.colorMessage(this.charNumberError, checkNumber);
+
+        const checkSpecial = Validator.validateStringContainsSpecialCharacters(value);
+        this.colorMessage(this.charSpecialError, checkSpecial);
+
+        if(checkLength && checkLowerUpper && checkNumber && checkSpecial) {
+            input.classList.add("is-valid");
+            input.classList.remove("is-invalid");
+            return true;
+        }
+        input.classList.add("is-invalid");
+        input.classList.remove("is-valid");
+        return false;
+
+
+    }
+    validatePasswordCopy(inputKey, input) {
+        const [passwordKey, passwordInput] = this._getInput(this.password);
+
+        if(passwordInput.classList.contains("is-invalid") ||
+            passwordInput.value.length === 0 ||
+            !Validator.validateStringEquals(passwordInput.value, input.value))
+        {
+            input.classList.add("is-invalid");
+            input.classList.remove("is-valid");
+            return false;
+        }
+
+        input.classList.add("is-valid");
+        input.classList.remove("is-invalid");
+        return true;
+    }
+
+    colorMessage(message, ok) {
+        if(ok) {
+            message.classList.add("text-success");
+            message.classList.remove("text-danger")
+        }
+        else {
+            message.classList.remove("text-success");
+            message.classList.add("text-danger");
+        }
+    }
+
+    clearColorMessage( message) {
+        message.classList.remove("text-success", "text-danger");
+    }
+
+    clear() {
+        this._clear();
+        this.clearColorMessage(this.charLengthError);
+        this.clearColorMessage(this.charLowerUpperError);
+        this.clearColorMessage(this.charNumberError);
+        this.clearColorMessage(this.charSpecialError);
+        this.formCheckBox.checked = true;
+        this.fieldDisabled();
+        this._submit.disabled = true;
+    }
+
+    async send(data) {
+        if(!data) return
+
+        const user = AuthenticationService.getUser();
+
+        const signinData = {
+            email: user.email,
+            passwordOld: data.get(this.passwordOld),
+            password: data.get(this.password)
+        };
+
+        AuthenticationService.postChangePassword(signinData).then( response => {
+
+            if (response.user && response.token) {
+                const authData = {
+                    user: response.user,
+                    token: response.token,
+                    expiresIn: response.expiresIn
+                }
+                AuthenticationService.setAuthData(authData);
+                this.clear();
+                MessageUtils.success("Votre mot de passe a bien été modifié");
+
+            } else if (response.messages) {
+                const messages = Array.from(response.messages);
+                messages.forEach(message => {
+                    MessageUtils.danger(message);
+                });
+            }
+        });
+
+    }
+
+    fieldDisabled(checked = true) {
+        this._inputArray.forEach(([inputKey, input]) =>{
+            input.disabled = checked;
+        });
+    }
 
 }

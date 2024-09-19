@@ -26,6 +26,13 @@ export class AuthenticationService {
         return await response.json();
     }
 
+    static postChangePassword = async (requestData) => {
+        const parameters = AuthenticationService.httpHeader("POST");
+        parameters.body = JSON.stringify(requestData);
+        const response = await fetch(`${API_AUTH_URL}/change-password`, parameters);
+        return await response.json();
+    }
+
     static fetchForgotPassword = async(email) => {
         const response = await fetch(`${API_AUTH_URL}/forgot-password/${email}`);
         return await response.json();
