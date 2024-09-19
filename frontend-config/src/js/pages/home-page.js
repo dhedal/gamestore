@@ -53,7 +53,6 @@ export class HomePage extends PageComponent {
     }
 
     async refresh() {
-        console.log("## home-page ## refresh");
         await this.ready();
     }
 

@@ -11,4 +11,14 @@ export class OrderService {
         const response = await fetch(`${API_ORDER_URL}/register`, header);
         return await response.json();
     }
+
+    static getOrdersByCreatedAt = async (date) => {
+        const response = await fetch(`${API_ORDER_URL}/created-at/${date}`);
+        return await response.json();
+    }
+
+    static getOrdersByUserUuid = async (userUuid) => {
+        const response = await fetch(`${API_ORDER_URL}/user/${userUuid}`);
+        return await response.json();
+    }
 }

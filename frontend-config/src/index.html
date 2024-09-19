@@ -131,6 +131,42 @@
             </div>
         </template>
 
+        <template id="order-template">
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-12 mb-2">
+                                <small>Commande effectuée le </small><br>
+                                <span class="fw-bold order-date-created"></span>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-12 mb-2">
+                                <small>Total</small><br>
+                                <span class="fw-bold order-price"></span> €
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-12 mb-2">
+                                <small>Status</small><br>
+                                <span class="fw-bold order-status"></span>
+                            </div>
+                            <div class="col-lg-5 col-md-5 col-sm-12 mb-2">
+                                <small>N° de commande: </small><br>
+                                <small class="fw-bold order-num"></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row order-lines-container">
+
+                        </div>
+                    </div>
+                    <div class="card-footer text-body-secondary">
+                        <a href="javascript:void(0)">Livré</a>
+                    </div>
+                </div>
+            </div>
+
+        </template>
+
 
         <!-- Full screen modal login -->
         <div class="modal fade" id="authentication-modal" tabindex="-1" aria-labelledby="exampleModalFullscreenLabel"  aria-hidden="true">

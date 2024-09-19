@@ -1,6 +1,7 @@
 package com.ecf.gamestore.dto;
 
 import com.ecf.gamestore.models.enumerations.GameGenre;
+import com.ecf.gamestore.models.enumerations.OrderStatus;
 import com.ecf.gamestore.models.enumerations.Platform;
 
 import java.util.Arrays;
@@ -12,6 +13,7 @@ public class CacheDataDTO {
     private Platform [] platforms = Platform.values();
     private GameGenre [] genres = GameGenre.values();
     private Map<Integer, Integer> gameCountMap = new HashMap<>();
+    private OrderStatus [] orderStatus = OrderStatus.values();
 
     public Platform[] getPlatforms() {
         return platforms;
@@ -35,6 +37,14 @@ public class CacheDataDTO {
 
     public void setGameCountMap(Map<Integer, Integer> gameCountMap) {
         this.gameCountMap = gameCountMap;
+    }
+
+    public OrderStatus[] getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus[] orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public void parseAndSetGameCountMap(Map<Platform, Long> gameCountMap) {

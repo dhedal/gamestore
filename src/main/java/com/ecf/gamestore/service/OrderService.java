@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -165,5 +166,19 @@ public class OrderService extends AbstractService<OrderRepository, Order>{
         LOG.debug("## findByUuid(String uuid)");
         if(!StringUtils.hasText(uuid)) return null;
         return this.repository.findByUuid(uuid);
+    }
+
+    public List<Order> getOrdersByCreatedAt(LocalDateTime createdAt) {
+        LOG.debug("## getOrdersByCreatedAt(LocalDate createdAt)");
+        return this.repository.findOrdersByCreatedAtGreaterThanEqual(createdAt);
+    }
+
+    public List<Order> getOrdersByUserUuid(String userUuid) {
+        LOG.debug("## getOrdersByUserUuid(String userUuid)");
+        if(!StringUtils.hasText(userUuid)) return null;
+        GSUser user = this.gsUserService.getByUuid(userUuid);
+        if(Objects.isNull(user)) return null;
+
+        return this.repository.findOrdersByUser(user);
     }
 }

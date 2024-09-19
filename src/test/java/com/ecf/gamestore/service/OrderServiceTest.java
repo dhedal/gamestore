@@ -14,6 +14,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -252,6 +254,12 @@ public class OrderServiceTest {
             assertTrue(orderLineQuantity == requestArticleQuantity);
             assertTrue(stockBeforeOrder - orderLineQuantity == article.getStock().intValue());
         }
+    }
+
+    @Test
+    public void test_getOrdersByCreatedAt() {
+        List<Order> orders = this.orderService.getOrdersByCreatedAt(LocalDateTime.of(2024, Month.SEPTEMBER, 17, 0, 0));
+        orders.forEach(System.out::println);
     }
 
     private OrderRequest createOrderRequest() {

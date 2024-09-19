@@ -7,6 +7,7 @@ class Cache {
     gameArticleLimit
     gameCountMap = null;
     dataTempMap;
+    orderStatusMap;
     constructor(limitDefault = 9) {
         this.gameArticleLimit = limitDefault;
         this.dataTempMap = new Map();
@@ -27,10 +28,19 @@ class Cache {
         if(key != null && value != null) this.dataTempMap.set(key, value);
     }
 
+    getKeyOrderStatusDelivred() {
+        return this.orderStatusMap.get(2).key;
+    }
+
+    getKeyOrderStatusValidated() {
+        return this.orderStatusMap.get(1).key;
+    }
+
     async init() {
         this.platformMap = new Map();
         this.genreMap = new Map();
         this.gameCountMap = new Map();
+        this.orderStatusMap = new Map();
         await PageDataService.fetchCacheData().then(datas => {
             Object.entries(datas.gameCountMap).forEach(([key, value]) => {
                 this.gameCountMap.set(parseInt(key), value);
@@ -43,13 +53,14 @@ class Cache {
             datas.genres.forEach(genre => {
                 this.genreMap.set(genre.key, genre);
             });
-
-
+            datas.orderStatus.forEach(status => {
+                this.orderStatusMap.set(status.key, status);
+            });
         });
     }
 
     async check() {
-        if(this.platformMap == null || this.genreMap == null) {
+        if(this.platformMap == null || this.genreMap == null || this.orderStatusMap == null) {
             await this.init();
         }
     }

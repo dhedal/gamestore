@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <div class="col-lg-3 col-md-3 col-sm-12 d-flex align-items-start">
+        <div class="col-lg-3 col-md-3 col-sm-12 d-flex align-items-start mb-3">
             <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <button class="nav-link active" id="order-tab" data-bs-toggle="pill" data-bs-target="#order-pane" type="button" role="tab" aria-controls="order-pane" aria-selected="true">
                     Commandes
@@ -17,52 +17,15 @@
         <div class="col-lg-9 col-md-9 col-sm-12">
             <div class="tab-content" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="order-pane" role="tabpanel" aria-labelledby="order-tab" tabindex="0">
-                    <div class="row mt-5">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-3 col-sm-12 mb-2">
-                                            <small>Commande effectuée le </small><br>
-                                            <span class="fw-bold">16 mai 2023</span>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-12 mb-2">
-                                            <small>Total</small><br>
-                                            <span class="fw-bold">12.98 €</span>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-12 mb-2">
-                                            <small>Status</small><br>
-                                            <span class="fw-bold">VALIDE</span>
-                                        </div>
-                                        <div class="col-lg-5 col-md-5 col-sm-12 mb-2">
-                                            <small>N° de commande: </small><br>
-                                            <small class="fw-bold">ddd-qsdf--qsdf-s--sf-qsf--qsdff</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <img class="img-fluid" src="/assets/images/empty.bmp" alt="">
-                                        </div>
-                                        <div class="col-9">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <p class="card-title">le titre du jeux</p>
-                                                </div>
-                                                <div class="col-12">
-                                                    <span class="card-text">PS5</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer text-body-secondary">
-                                    <a href="javascript:void(0)">Livré</a>
-                                </div>
-                            </div>
-                        </div>
+                    <div>
+                        <button id="order-delivred-btn" class="btn btn-outline-success mb-3">Commandes livrées</button>
+                        <button id="order-validated-btn" class="btn btn-outline-primary mb-3">Commandes validées</button>
                     </div>
+
+                    <div id="orders-delivred-container" class="row mt-5 visually-hidden"></div>
+                    <div id="orders-validated-container" class="row mt-5 visually-hidden"></div>
+
+
                 </div>
 
                 <div class="tab-pane fade" id="info-pane" role="tabpanel" aria-labelledby="info-tab" tabindex="0">

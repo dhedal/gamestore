@@ -178,5 +178,70 @@ export class CartGameTemplate {
 
         return clone;
     }
+}
 
+
+export class OrderTemplate {
+    template;
+    isTeam;
+    constructor(templateId = "order-template", isTeam = false) {
+        this.template = document.getElementById(templateId);
+        this.isEmployee = AuthenticationService.isEmployee();
+    }
+
+    clone(order) {
+        if(order == null) return null;
+        const clone = this.template.content.cloneNode(true);
+        let total = 0;
+        const card = clone.querySelector(".card");
+        card.querySelector(".order-date-created").textContent = order.createdAt.split("T")[0];
+        card.querySelector(".order-status").textContent = order.status.label;
+        card.querySelector(".order-num").textContent = order.uuid;
+
+        const orderLinesContainer = card.querySelector(".order-lines-container");
+        order.orderLines.forEach(orderLine => {
+            const result = this.orderLineTemplate(orderLine);
+            total += result.total;
+            orderLinesContainer.appendChild(result.div);
+        });
+
+        card.querySelector(".order-price").textContent = total + " €" ;
+
+        if(!this.isTeam) {
+            card.querySelector(".card-footer").classList.add("visually-hidden");
+        }
+
+        return clone;
+    }
+
+    orderLineTemplate(orderLine) {
+
+        let reduction = 0;
+        const quantity = orderLine.quantity;
+        const price = orderLine.gameArticle.price;
+        if(orderLine.promotion) {
+            reduction = (price * promotion.discountRate) / 100;
+        }
+        const total = (price - reduction) * quantity;
+        const div = document.createElement("div");
+        div.classList.add("col-12", "border", "border-primary-subtle", "mb-2");
+        div.innerHTML =  `
+        ${this.keyAndValueTemplate("Titre:", orderLine.gameArticle.gameInfo.title)}
+        ${this.keyAndValueTemplate("Platforme:", orderLine.gameArticle.platform.label)}
+        ${this.keyAndValueTemplate("Prix unitaire:", price + " €")}
+        ${this.keyAndValueTemplate("Réduction:", "-" + reduction + " €")}
+        ${this.keyAndValueTemplate("Quantité:", quantity)}
+        ${this.keyAndValueTemplate("Total:", total + " €")}
+        `;
+
+        return {total: total, div: div};
+    }
+
+    keyAndValueTemplate(key, value) {
+        return `
+        <div class="row">
+            <div class="col-lg-2 col-md-4 col-sm-12 fw-bold">${key}</div>
+            <div class="col-lg-10 col-md-8 col-sm-12">${value}</div>
+        </div>`;
+    }
 }
