@@ -12,9 +12,9 @@ export class AuthenticationService {
         return await response.json();
     }
 
-    static postSignup = async (streamer) => {
+    static postSignup = async (signupData) => {
         const parameters = AuthenticationService.httpHeader("POST");
-        parameters.body = JSON.stringify(streamer);
+        parameters.body = JSON.stringify(signupData);
         const response = await fetch(`${API_AUTH_URL}/signup`, parameters);
         return await response.json();
     }
@@ -74,7 +74,6 @@ export class AuthenticationService {
             }
         };
         if(withAuthorization) parameters.headers.Authorization = `Bearer ${AuthenticationService.getToken()}`;
-        console.log(parameters);
         return parameters;
     }
 

@@ -1,9 +1,6 @@
 package com.ecf.gamestore.controller;
 
-import com.ecf.gamestore.dto.SigninResponse;
-import com.ecf.gamestore.dto.SigninRequest;
-import com.ecf.gamestore.dto.SignupRequest;
-import com.ecf.gamestore.dto.SignupResponse;
+import com.ecf.gamestore.dto.*;
 import com.ecf.gamestore.service.AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,4 +51,5 @@ public class AuthenticationController {
         }
         return ResponseEntity.ok(response);
     }
+
 }

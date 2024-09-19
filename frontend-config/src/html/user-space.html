@@ -1,4 +1,157 @@
 <div class="container">
-    <h1>USER SPACE</h1>
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-12 d-flex align-items-start">
+            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <button class="nav-link active" id="order-tab" data-bs-toggle="pill" data-bs-target="#order-pane" type="button" role="tab" aria-controls="order-pane" aria-selected="true">
+                    Commandes
+                </button>
+                <button class="nav-link" id="info-tab" data-bs-toggle="pill" data-bs-target="#info-pane" type="button" role="tab" aria-controls="info-pane" aria-selected="false">
+                    Mes informations
+                </button>
+                <button class="nav-link" id="password-tab" data-bs-toggle="pill" data-bs-target="#password-pane" type="button" role="tab" aria-controls="password-pane" aria-selected="false">
+                    Changer de mot de passe
+                </button>
+            </div>
 
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-12">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="order-pane" role="tabpanel" aria-labelledby="order-tab" tabindex="0">
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-12 mb-2">
+                                            <small>Commande effectuée le </small><br>
+                                            <span class="fw-bold">16 mai 2023</span>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-12 mb-2">
+                                            <small>Total</small><br>
+                                            <span class="fw-bold">12.98 €</span>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-12 mb-2">
+                                            <small>Status</small><br>
+                                            <span class="fw-bold">VALIDE</span>
+                                        </div>
+                                        <div class="col-lg-5 col-md-5 col-sm-12 mb-2">
+                                            <small>N° de commande: </small><br>
+                                            <small class="fw-bold">ddd-qsdf--qsdf-s--sf-qsf--qsdff</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <img class="img-fluid" src="/assets/images/empty.bmp" alt="">
+                                        </div>
+                                        <div class="col-9">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <p class="card-title">le titre du jeux</p>
+                                                </div>
+                                                <div class="col-12">
+                                                    <span class="card-text">PS5</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer text-body-secondary">
+                                    <a href="javascript:void(0)">Livré</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="info-pane" role="tabpanel" aria-labelledby="info-tab" tabindex="0">
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="input-group mb-3">
+                                <div class="input-group-text">
+                                    <input id="user-form-checkbox" class="form-check-input mt-0" type="checkbox" checked aria-label="Checkbox for following text input">
+                                </div>
+                                <span class="input-group-text">Modififier mes informations</span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <form id="user-modif-form">
+                                <div class="mb-5 form-floating" >
+                                    <input type="text" class="form-control disabled" id="user-email" disabled>
+                                    <label for="modif-last-name">Email</label>
+                                </div>
+                                <h6 class="mb-4">Nom et prénom</h6>
+                                <div class="mb-4 form-floating" >
+                                    <input type="text" class="form-control" id="modif-first-name" required disabled>
+                                    <label for="modif-first-name">Prénom</label>
+                                </div>
+                                <div class="mb-5 form-floating" >
+                                    <input type="text" class="form-control" id="modif-last-name" required disabled>
+                                    <label for="modif-last-name">Nom</label>
+                                </div>
+                                <h6 class="mb-4">Votre adresse</h6>
+                                <div class="mb-4 form-floating" >
+                                    <input type="text" class="form-control" id="modif-street-address" required disabled>
+                                    <label for="modif-street-address">Numéro et nom de la voie</label>
+                                </div>
+                                <div class="mb-4 form-floating" >
+                                    <input type="number" class="form-control" id="modif-zip-code" required disabled>
+                                    <label for="modif-zip-code">Code postal</label>
+                                </div>
+                                <div class="mb-4 form-floating" >
+                                    <input type="text" class="form-control" id="modif-city" required disabled>
+                                    <label for="modif-city">Ville</label>
+                                </div>
+                                <div class="mb-4 form-floating" >
+                                    <input type="text" class="form-control" id="modif-country" required disabled>
+                                    <label for="modif-country">Pays</label>
+                                </div>
+                            </div>
+                        <div class="col-12">
+                            <button id="modif-submit" class="btn btn-outline-primary mb-3" disabled>Modifier</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+
+
+
+                <div class="tab-pane fade" id="password-pane" role="tabpanel" aria-labelledby="password-tab" tabindex="0">
+                    <div class="row mt-5">
+                        <div class="col-12"></div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">
+                                <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
+                            </div>
+                            <span class="input-group-text">Changer de mot de passe</span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating mb-4">
+                            <input type="password" class="form-control" id="change-password" required>
+                            <label for="change-password">Mot de passe</label>
+                        </div>
+                        <div class="form-floating mb-4">
+                            <input type="password" class="form-control" id="change-password-copy" required>
+                            <label for="change-password-copy">Ressaisisez votre mot de passe</label>
+                        </div>
+                        <span class="fst-italic fs-6">Le mot de passe doit: </span>
+                        <ul class="fst-italic fs-6">
+                            <li ><span id="change-error-char-length">comporter au moins 8 caractères.</span></li>
+                            <li ><span id="change-error-char-lower-upper">contenir au moins une lettre majuscule et minuscule (A-Za-z).</span></li>
+                            <li ><span id="change-error-char-number">contenir au moins un chiffre (0-9).</span></li>
+                            <li ><span id="change-error-char-special">contenir au moins un caractère spécial (par ex. !@#$%&*?:+-).</span></li>
+                        </ul>
+                    </div>
+                    <div class="col-12">
+                        <button id="change-submit" class="btn btn-outline-primary mb-3">Changer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
 </div>

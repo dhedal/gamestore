@@ -3,6 +3,7 @@ import {MessageUtils} from "../utils/message-utils.js";
 import {appContext} from "../config/app-context.js";
 import {AuthenticationModal} from "../modals/modal.js";
 import {Carousel} from "bootstrap";
+import {UserService} from "../services/user-service.js";
 
 
 class Validator {
@@ -116,15 +117,24 @@ class Form {
         return this._inputArray.find(([key, input]) => inputKey === key);
     }
 
+    _setInputValue(inputId, value) {
+        const input = document.getElementById(inputId);
+        if(input) input.value = value;
+    }
+
     _addInputs(inputId, eventType, fnValidate) {
         const input = document.getElementById(inputId);
         this._fnMap.set(inputId, fnValidate);
         this._inputArray.push([inputId, input]);
         input.addEventListener(eventType, event => {
             event.stopPropagation();
-            this._validateForm();
+            this.validateForm();
         });
         return inputId
+    }
+
+    validateForm() {
+        this._validateForm();
     }
 
     _validateForm() {
@@ -188,10 +198,7 @@ export class SigninForm extends Form{
             password: data.get(this.password)
         };
 
-        console.log(signinData);
-
         AuthenticationService.postSignin(signinData).then(async response => {
-            console.log(response);
 
             if (response.user && response.token) {
                 const authData = {
@@ -332,11 +339,7 @@ export class SignupForm extends Form {
             country: data.get(this.country)
         };
 
-        console.log(signupData);
-
         AuthenticationService.postSignup(signupData).then(response => {
-            console.log(response);
-
             if(response.ok) {
                 this.clear();
                 const carousel = new Carousel(document.getElementById("formCarousel"));
@@ -358,4 +361,123 @@ export class SignupForm extends Form {
         });
 
     }
+}
+
+export class UserModifyForm extends Form {
+    user;
+    formCheckBox;
+    email;
+    firstName;
+    lastName;
+    streetAddress;
+    zipCode;
+    city;
+    country;
+
+    constructor(formElement = "user-modif-form") {
+        super(formElement, "modif-submit");
+
+        this.firstName = this._addInputs("modif-first-name", "keyup", Validator.validateInputNotEmpty);
+        this.lastName = this._addInputs("modif-last-name", "keyup", Validator.validateInputNotEmpty);
+        this.streetAddress = this._addInputs("modif-street-address", "keyup", Validator.validateInputNotEmpty);
+        this.zipCode = this._addInputs("modif-zip-code", "keyup", Validator.validateZipCode);
+        this.city = this._addInputs("modif-city", "keyup", Validator.validateInputNotEmpty);
+        this.country = this._addInputs("modif-country", "keyup", Validator.validateInputNotEmpty);
+
+        this.email = "user-email";
+        this.formCheckBox = document.getElementById("user-form-checkbox");
+        this.formCheckBox.addEventListener("change", event => {
+            this.fieldDisabled(this.formCheckBox.checked);
+        });
+    }
+
+    clear() {
+        this._inputArray.forEach(([elementKey, element]) => {
+            this._clearValidOrInvalidCSS(element);
+        });
+        this._submit.disabled = true;
+    }
+
+    validateForm() {
+        if(!this.formCheckBox.checked && this.isDataChanged()) {
+            this._validateForm();
+        }
+        else {
+            this.clear();
+        }
+    }
+
+    async send(data) {
+        if(!data) return;
+
+        const userInfoData = {
+            uuid: this.user.uuid,
+            firstName: data.get(this.firstName),
+            lastName: data.get(this.lastName),
+            streetAddress: data.get(this.streetAddress),
+            zipCode: data.get(this.zipCode),
+            city: data.get(this.city),
+            country: data.get(this.country)
+        };
+
+        UserService.postUserInfoUpdate(userInfoData).then(response => {
+
+            if(response.ok) {
+                const authData = AuthenticationService.getAuthData();
+                if(authData == null) {
+                    this.user = null;
+                    AuthenticationService.logout();
+                    MessageUtils.danger("Un problème est survenue, déconnectez vous puis reconnectez vous");
+                }
+                else {
+                    this.user = response.user;
+                    authData.user = this.user;
+                    AuthenticationService.setAuthData(authData);
+                    this.clear();
+                    MessageUtils.success("Vos informations personnelles ont bien été modifiées");
+                }
+
+            }
+            else {
+                const messages = response.messages;
+                if(messages) {
+                    messages.forEach(message => {
+                        MessageUtils.danger(message);
+                    })
+                }
+            }
+        });
+    }
+
+    fill(userData) {
+        if(userData == null) return;
+        this.user = userData;
+        this._setInputValue(this.firstName, this.user.firstName);
+        this._setInputValue(this.lastName, this.user.lastName);
+        this._setInputValue(this.streetAddress, this.user.address.streetAddress);
+        this._setInputValue(this.zipCode, this.user.address.zipCode);
+        this._setInputValue(this.city, this.user.address.city);
+        this._setInputValue(this.country, this.user.address.country);
+        const emailElement = document.getElementById(this.email);
+        emailElement.value = this.user.email;
+    }
+
+    fieldDisabled(checked = true) {
+        this._inputArray.forEach(([inputKey, input]) =>{
+            input.disabled = checked;
+        });
+    }
+
+    isDataChanged() {
+        const data= this._extractData();
+        if(this.user.firstName !== data.get(this.firstName)) return true;
+        if(this.user.lastName !== data.get(this.lastName)) return true;
+        if(this.user.address.streetAddress !== data.get(this.streetAddress)) return true;
+        if(this.user.address.zipCode !== data.get(this.zipCode)) return true;
+        if(this.user.address.city !== data.get(this.city)) return true;
+        if(this.user.address.country !== data.get(this.country)) return true;
+        return false;
+    }
+
+
 }

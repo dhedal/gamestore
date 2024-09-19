@@ -1,11 +1,9 @@
 package com.ecf.gamestore.service;
 
-import com.ecf.gamestore.dto.SigninRequest;
-import com.ecf.gamestore.dto.SigninResponse;
-import com.ecf.gamestore.dto.SignupRequest;
-import com.ecf.gamestore.dto.SignupResponse;
+import com.ecf.gamestore.dto.*;
 import com.ecf.gamestore.mapper.GSUserMapper;
 import com.ecf.gamestore.models.GSUser;
+import com.ecf.gamestore.models.embeddables.Address;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +35,7 @@ public class AuthenticationService {
             MailService mailService,
             AuthenticationManager authenticationManager,
             JwtService jwtService,
-            Validator validator,
+            @Lazy Validator validator,
             BCryptPasswordEncoder  passwordEncoder){
         this.gsUserService = gsUserService;
         this.mailService = mailService;
@@ -144,4 +142,5 @@ public class AuthenticationService {
 
         return response;
     }
+
 }
