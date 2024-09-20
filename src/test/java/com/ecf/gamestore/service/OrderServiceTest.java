@@ -73,7 +73,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void test_register_NullOrder_ShouldThrowIllegalArgumentException() {
+    public void test_register_NullRequest_ShouldThrowIllegalArgumentException() {
         OrderRequest request = null;
         OrderResponse response = new OrderResponse();
 

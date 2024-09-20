@@ -62,6 +62,8 @@ public class AuthenticationController {
             LOG.error(ex.toString());
             response.addMessage("Un problème est survenu, veuillez réessayer ultérieurement");
         }
+
+
         return ResponseEntity.ok(response);
     }
 

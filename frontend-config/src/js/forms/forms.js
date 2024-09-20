@@ -4,6 +4,7 @@ import {appContext} from "../config/app-context.js";
 import {AuthenticationModal} from "../modals/modal.js";
 import {Carousel} from "bootstrap";
 import {UserService} from "../services/user-service.js";
+import {ResetPasswordService} from "../services/reset-password-service.js";
 
 
 class Validator {
@@ -493,6 +494,8 @@ export class ChangePasswordForm extends Form {
     constructor(formElement = "change-password-form") {
         super(formElement, "change-password-submit");
 
+
+
         this.passwordOld = this._addInputs("change-password-old", "keyup", this.validatePassword.bind(this));
         this.password = this._addInputs("change-password", "keyup", this.validatePassword.bind(this));
         this.passwordCopy = this._addInputs("change-password-copy", "keyup", this.validatePasswordCopy.bind(this));
@@ -607,7 +610,6 @@ export class ChangePasswordForm extends Form {
                 });
             }
         });
-
     }
 
     fieldDisabled(checked = true) {
@@ -616,4 +618,153 @@ export class ChangePasswordForm extends Form {
         });
     }
 
+}
+
+export class ResetPasswordForm extends Form{
+    token;
+    password;
+    passwordCopy;
+    charLengthError;
+    charLowerUpperError;
+    charNumberError;
+    charSpecialError;
+    constructor(token, formElement = "reset-password-form") {
+        super(formElement, "reset-password-submit");
+        this.token = token;
+
+        this.password = this._addInputs("reset-password", "keyup", this.validatePassword.bind(this));
+        this.passwordCopy = this._addInputs("reset-password-copy", "keyup", this.validatePasswordCopy.bind(this));
+
+        this.charLengthError = document.getElementById("reset-error-char-length");
+        this.charLowerUpperError = document.getElementById("reset-error-char-lower-upper");
+        this.charNumberError = document.getElementById("reset-error-char-number");
+        this.charSpecialError = document.getElementById("reset-error-char-special");
+    }
+
+    validatePassword(inputKey, input) {
+        const value = input.value;
+
+        const checkLength = Validator.validateStringLength(value);
+        this.colorMessage(this.charLengthError, checkLength);
+
+        const checkLowerUpper = Validator.validateStringContainsUpperAndLowerCase(value);
+        this.colorMessage(this.charLowerUpperError, checkLowerUpper);
+
+        const checkNumber = Validator.validateStringContainsCharNumber(value);
+        this.colorMessage(this.charNumberError, checkNumber);
+
+        const checkSpecial = Validator.validateStringContainsSpecialCharacters(value);
+        this.colorMessage(this.charSpecialError, checkSpecial);
+
+        if(checkLength && checkLowerUpper && checkNumber && checkSpecial) {
+            input.classList.add("is-valid");
+            input.classList.remove("is-invalid");
+            return true;
+        }
+        input.classList.add("is-invalid");
+        input.classList.remove("is-valid");
+        return false;
+    }
+
+    validatePasswordCopy(inputKey, input) {
+        const [passwordKey, passwordInput] = this._getInput(this.password);
+
+        if(passwordInput.classList.contains("is-invalid") ||
+            passwordInput.value.length === 0 ||
+            !Validator.validateStringEquals(passwordInput.value, input.value))
+        {
+            input.classList.add("is-invalid");
+            input.classList.remove("is-valid");
+            return false;
+        }
+
+        input.classList.add("is-valid");
+        input.classList.remove("is-invalid");
+        return true;
+    }
+
+    colorMessage(message, ok) {
+        if(ok) {
+            message.classList.add("text-success");
+            message.classList.remove("text-danger")
+        }
+        else {
+            message.classList.remove("text-success");
+            message.classList.add("text-danger");
+        }
+    }
+
+    clearColorMessage( message) {
+        message.classList.remove("text-success", "text-danger");
+    }
+
+    clear() {
+        this._clear();
+        this.clearColorMessage(this.charLengthError);
+        this.clearColorMessage(this.charLowerUpperError);
+        this.clearColorMessage(this.charNumberError);
+        this.clearColorMessage(this.charSpecialError);
+        this._submit.disabled = true;
+    }
+
+    async send(data) {
+        if(!data) return
+
+        const resetPasswordData = {
+            token: this.token,
+            password: data.get(this.password)
+        };
+
+        ResetPasswordService.postResetPassword(resetPasswordData).then( response => {
+
+            if (response.ok) {
+                this.clear();
+                window.location.replace("/home");
+                MessageUtils.success("Votre mot de passe a bien été réinitialisé");
+
+            } else if (response.messages) {
+                const messages = Array.from(response.messages);
+                messages.forEach(message => {
+                    MessageUtils.danger(message);
+                });
+            }
+            else{
+                MessageUtils.danger("Un problème serveur est survenue, veuillez réessayer ultérieurement");
+            }
+        });
+
+    }
+
+}
+
+
+export class ForgotPasswordForm extends Form{
+    email;
+    constructor(formElement = "forgot-password-form") {
+        super(formElement, "forgot-password-submit");
+
+        this.email = this._addInputs("forgot-password-email", "keyup", Validator.validateEmail);
+    }
+
+    async send(data) {
+        if(!data) return;
+
+        const forgotPasswordData = {
+            email: data.get(this.email)
+        };
+
+        ResetPasswordService.postForgotPassword(forgotPasswordData).then(response => {
+            if(response.ok) {
+                this.clear();
+                MessageUtils.success("Un email vous a été envoyer");
+            }
+            else{
+                const messages = Array.from(response.messages);
+                messages.forEach(message => {
+                    MessageUtils.danger(message);
+                });
+            }
+        });
+
+    }
 }

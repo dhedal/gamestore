@@ -205,7 +205,7 @@
                                                                 Créer un compte
                                                                 <i class="bi bi-arrow-bar-right"></i>
                                                             </button>
-                                                            <a href="/forgot-password" class="btn btn-link">J'ai oublié mon mot de passe</a>
+                                                            <button class="btn btn-link" data-bs-target="#formCarousel" data-bs-slide-to="2">J'ai oublié mon mot de passe</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -288,6 +288,31 @@
                                                     </div>
                                                 </div>
                                             </form>
+                                        </div>
+                                        <!--      FORGOT PASSWORD -->
+                                        <div class="carousel-item">
+                                            <div class="row">
+                                                <div class="col-12 mb-5">
+                                                    <h3>Vous avez oublié votre mot de passe ?</h3>
+                                                </div>
+                                                <div class="col-12 mb-5">
+                                                    Merci d'indiquer l'adresse avec laquelle vous vous êtes inscrit. Un Email vous sera renvoyé.
+                                                    Vérifiez bien votre boite Spam si vous ne le recevez pas.
+                                                </div>
+                                                <form id="forgot-password-form" class="col-12">
+                                                    <div class="mb-4 form-floating" >
+                                                        <input type="email" class="form-control" id="forgot-password-email" >
+                                                        <label for="forgot-password-email">email</label>
+                                                    </div>
+                                                    <div>
+                                                        <button id="forgot-password-submit" class="btn btn-outline-info">Envoyer</button>
+                                                        <button class="btn btn-link" data-bs-target="#formCarousel" data-bs-slide-to="0">
+                                                            <i class="bi bi-arrow-bar-left"></i>
+                                                            Se connecter
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
 
                                     </div>

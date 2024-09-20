@@ -1,5 +1,5 @@
 import {router} from "./routes/router.js";
-import {SigninForm, SignupForm} from "./forms/forms.js";
+import {ForgotPasswordForm, SigninForm, SignupForm} from "./forms/forms.js";
 import {AuthenticationService} from "./services/authentication-service";
 import {appContext} from "./config/app-context";
 
@@ -130,6 +130,7 @@ class App{
         router.loadPage().then(() => {
             const signin = new SigninForm();
             const signup = new SignupForm();
+            const forgotPassword = new ForgotPasswordForm();
         });
     }
 }

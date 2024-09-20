@@ -170,4 +170,33 @@ public class MailService {
 
     }
 
+    public boolean sendResetPasswordLink(String email, String token) {
+        LOG.debug("## sendResetPasswordLink(String email, String token)");
+        try {
+
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(this.emailForTest);
+            helper.setSubject("Réinitialisation de votre mot de passe");
+            final String resetLink = this.resetPasswordUrl + token;
+            String text = String.format("""
+                    Bonjour
+                    Vous avez demandé une réinitialisation de votre mot de passe.
+                    Cliquez sur le lien ci-dessous pour réinitialiser votre mot de passe :    
+                    %s   
+                               
+                    Cordialement,
+                                        
+                    L'équipe GameStore         
+                    """.formatted(resetLink));
+            helper.setText(text);
+
+            mailSender.send(message);
+            return true;
+        } catch (MailException | MessagingException e) {
+            LOG.error("Failed to send email: " + e.toString());
+        }
+        return false;
+    }
+
 }
