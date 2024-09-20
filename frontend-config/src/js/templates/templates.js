@@ -1,6 +1,5 @@
-import {cache} from "../config/cache.js";
+
 import {AuthenticationService} from "../services/authentication-service.js";
-import {appContext} from "../config/app-context";
 
 /**
  *
@@ -187,6 +186,7 @@ export class OrderTemplate {
     constructor(templateId = "order-template", isTeam = false) {
         this.template = document.getElementById(templateId);
         this.isEmployee = AuthenticationService.isEmployee();
+        this.isTeam = isTeam;
     }
 
     clone(order) {
@@ -210,6 +210,27 @@ export class OrderTemplate {
         if(!this.isTeam) {
             card.querySelector(".card-footer").classList.add("visually-hidden");
         }
+        else {
+            const checkbox = card.querySelector(".checkbox-validate");
+            const validateButton = card.querySelector(".validate-button");
+
+            checkbox.addEventListener("change", event => {
+                if (checkbox.checked) {
+                    validateButton.disabled = true;
+                } else {
+                    validateButton.disabled = false;
+                }
+            });
+
+            validateButton.addEventListener("click", event => {
+                const customEvent = new CustomEvent("order-delivered", {
+                    bubbles: true,
+                    detail: {order: order.uuid}
+                });
+                validateButton.dispatchEvent(customEvent);
+            });
+
+        }
 
         return clone;
     }
@@ -220,18 +241,18 @@ export class OrderTemplate {
         const quantity = orderLine.quantity;
         const price = orderLine.gameArticle.price;
         if(orderLine.promotion) {
-            reduction = (price * promotion.discountRate) / 100;
+            reduction = (price * orderLine.promotion.discountRate) / 100;
         }
         const total = (price - reduction) * quantity;
         const div = document.createElement("div");
-        div.classList.add("col-12", "border", "border-primary-subtle", "mb-2");
+        div.classList.add("col-12", "border", "border-primary-subtle", "mb-3");
         div.innerHTML =  `
         ${this.keyAndValueTemplate("Titre:", orderLine.gameArticle.gameInfo.title)}
         ${this.keyAndValueTemplate("Platforme:", orderLine.gameArticle.platform.label)}
-        ${this.keyAndValueTemplate("Prix unitaire:", price + " €")}
-        ${this.keyAndValueTemplate("Réduction:", "-" + reduction + " €")}
+        ${this.keyAndValueTemplate("Prix unitaire:", price.toFixed(2) + " €")}
+        ${this.keyAndValueTemplate("Réduction:", "-" + reduction.toFixed(2) + " €")}
         ${this.keyAndValueTemplate("Quantité:", quantity)}
-        ${this.keyAndValueTemplate("Total:", total + " €")}
+        ${this.keyAndValueTemplate("Total:", total.toFixed(2) + " €")}
         `;
 
         return {total: total, div: div};

@@ -1,7 +1,6 @@
 package com.ecf.gamestore.service;
 
-import com.ecf.gamestore.dto.OrderRequest;
-import com.ecf.gamestore.dto.OrderResponse;
+import com.ecf.gamestore.dto.*;
 import com.ecf.gamestore.models.*;
 import com.ecf.gamestore.models.enumerations.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -261,6 +260,97 @@ public class OrderServiceTest {
         List<Order> orders = this.orderService.getOrdersByCreatedAt(LocalDateTime.of(2024, Month.SEPTEMBER, 17, 0, 0));
         orders.forEach(System.out::println);
     }
+
+    @Test
+    public void test_searchOrders_NullResponse_ShouldThrowIllegalArgumentException() {
+        OrderSearchRequest request = new OrderSearchRequest();
+        OrderSearchResponse response = null;
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            this.orderService.searchOrders(request, response);
+        });
+
+        assertEquals("OrderSearchResponse ne doit pas être null", exception.getMessage());
+    }
+
+    @Test
+    public void test_searchOrders_NullRequest_ShouldThrowIllegalArgumentException() {
+        OrderSearchRequest request = null;
+        OrderSearchResponse response = new OrderSearchResponse();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            this.orderService.searchOrders(request, response);
+        });
+
+        assertEquals("OrderSearchRequest ne doit pas être null", exception.getMessage());
+    }
+
+    @Test
+    public void test_searchOrders_ConstraintViolation() {
+        OrderSearchRequest request = this.createOrderSearchRequest();
+        List<String> tests = new ArrayList();
+
+        request.setEmail("");
+        tests.add("L'email' est obligatoire");
+        tests.add("le format d'email est invalide. ex : xxxx@xxx.xxx");
+        this.testOrderSearchResponse(this.orderService.searchOrders(request, new OrderSearchResponse()), tests);
+        tests.clear();
+
+        request.setEmail("qsfsqf.fsf");
+        tests.add("le format d'email est invalide. ex : xxxx@xxx.xxx");
+        this.testOrderSearchResponse(this.orderService.searchOrders(request, new OrderSearchResponse()), tests);
+        tests.clear();
+
+        request = this.createOrderSearchRequest();
+        request.setStatus(null);
+        tests.add("Le status de la commande doit être indiqué");
+        this.testOrderSearchResponse(this.orderService.searchOrders(request, new OrderSearchResponse()), tests);
+        tests.clear();
+
+        request = this.createOrderSearchRequest();
+        request.setEmail("fake@fake.fk");
+        tests.add("Cet email n'existe pas");
+        this.testOrderSearchResponse(this.orderService.searchOrders(request, new OrderSearchResponse()), tests);
+        tests.clear();
+    }
+
+    @Test
+    public void test_searchOrders_success() {
+        OrderSearchRequest request = this.createOrderSearchRequest();
+        List<String> tests = new ArrayList();
+        OrderSearchResponse response = this.testOrderSearchResponse(this.orderService.searchOrders(request, new OrderSearchResponse()), tests);
+        assertTrue(response.isOk());
+        assertTrue(response.getMessages().isEmpty());
+        List<OrderDTO> orders = response.getOrders();
+        assertNotNull(orders);
+        assertFalse(orders.isEmpty());
+        orders.forEach(order -> {
+            assertEquals(order.getStatus(), request.getStatus());
+        });
+    }
+
+    private OrderSearchRequest createOrderSearchRequest() {
+        OrderSearchRequest request = new OrderSearchRequest();
+        request.setEmail("admin@email.gs.com");
+        request.setStatus(OrderStatus.VALIDATED);
+
+        return request;
+    }
+
+    private OrderSearchResponse testOrderSearchResponse(OrderSearchResponse response, List<String> tests) {
+        assertNotNull(response);
+        List<String> messages = response.getMessages();
+        System.out.println();
+        messages.forEach(System.out::println);
+        assertTrue(messages.isEmpty() == tests.isEmpty());
+
+        for(String test: tests) {
+            assertTrue(messages.contains(test));
+        }
+        return response;
+    }
+
+
 
     private OrderRequest createOrderRequest() {
         OrderRequest request = new OrderRequest();

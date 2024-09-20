@@ -160,7 +160,13 @@
                         </div>
                     </div>
                     <div class="card-footer text-body-secondary">
-                        <a href="javascript:void(0)">Livré</a>
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">
+                                <input class="form-check-input mt-0 checkbox-validate" type="checkbox" checked="true">
+                            </div>
+                            <button class="btn btn-outline-secondary validate-button" type="button" disabled>Valider la livraison</button>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -293,11 +299,13 @@
                                         <div class="carousel-item">
                                             <div class="row">
                                                 <div class="col-12 mb-5">
-                                                    <h3>Vous avez oublié votre mot de passe ?</h3>
+                                                    <p class="fs-4 mb-4">Vous avez oublié votre mot de passe ?</p>
                                                 </div>
                                                 <div class="col-12 mb-5">
-                                                    Merci d'indiquer l'adresse avec laquelle vous vous êtes inscrit. Un Email vous sera renvoyé.
-                                                    Vérifiez bien votre boite Spam si vous ne le recevez pas.
+                                                    <small>
+                                                        Merci d'indiquer l'adresse avec laquelle vous vous êtes inscrit. Un Email vous sera renvoyé.
+                                                        Vérifiez bien votre boite Spam si vous ne le recevez pas.
+                                                    </small>
                                                 </div>
                                                 <form id="forgot-password-form" class="col-12">
                                                     <div class="mb-4 form-floating" >

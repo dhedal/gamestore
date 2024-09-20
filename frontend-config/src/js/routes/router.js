@@ -5,8 +5,9 @@ import {cache} from "../config/cache.js";
 import {GameDetailPage} from "../pages/game-detail-page.js";
 import {CartPage} from "../pages/cart-page.js";
 import {UserSpacePage} from "../pages/user-space-page.js";
-import {appContext} from "../config/app-context";
-import {ResetPasswordPage} from "../pages/reset-password-page";
+import {appContext} from "../config/app-context.js";
+import {ResetPasswordPage} from "../pages/reset-password-page.js";
+import {WorkSpacePage} from "../pages/work-space-page.js";
 
 export const WEBSITE_NAME = "GameStore";
 
@@ -20,7 +21,8 @@ class Router {
         this._addPage(new GameDetailPage());
         this._addPage(new CartPage());
         this._addPage(new UserSpacePage());
-        this._addPage(new ResetPasswordPage()),
+        this._addPage(new WorkSpacePage());
+        this._addPage(new ResetPasswordPage());
         this._addPage(new Page404());
         this.init();
     }

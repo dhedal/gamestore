@@ -5,6 +5,8 @@ import {AuthenticationModal} from "../modals/modal.js";
 import {Carousel} from "bootstrap";
 import {UserService} from "../services/user-service.js";
 import {ResetPasswordService} from "../services/reset-password-service.js";
+import {OrderService} from "../services/order-service.js";
+import {cache} from "../config/cache.js";
 
 
 class Validator {
@@ -494,8 +496,6 @@ export class ChangePasswordForm extends Form {
     constructor(formElement = "change-password-form") {
         super(formElement, "change-password-submit");
 
-
-
         this.passwordOld = this._addInputs("change-password-old", "keyup", this.validatePassword.bind(this));
         this.password = this._addInputs("change-password", "keyup", this.validatePassword.bind(this));
         this.passwordCopy = this._addInputs("change-password-copy", "keyup", this.validatePasswordCopy.bind(this));
@@ -757,6 +757,54 @@ export class ForgotPasswordForm extends Form{
             if(response.ok) {
                 this.clear();
                 MessageUtils.success("Un email vous a été envoyer");
+            }
+            else{
+                const messages = Array.from(response.messages);
+                messages.forEach(message => {
+                    MessageUtils.danger(message);
+                });
+            }
+        });
+
+    }
+}
+
+export class OrderSearchForm extends Form {
+    fnDisplayOrders;
+    currentEmail;
+    constructor(fnDisplayOrders = (orders= new Array()) => {},formElement="order-search-form") {
+        super(formElement, "order-search-submit");
+        this.fnDisplayOrders = fnDisplayOrders;
+        this.email = this._addInputs("order-search-email", "keyup", Validator.validateEmail);
+
+        const [inputKey, input] = this._getInput(this.email);
+        input.addEventListener("keydown", event => {
+            if(event.key === "Enter") {
+                event.preventDefault();
+                if(!this._submit.disabled) {
+                    this.send(this._extractData());
+                }
+
+            }
+        });
+    }
+
+    async send(data) {
+
+        if(!data) return;
+
+        const dataEmail = data.get(this.email);
+        if(this.currentEmail === dataEmail) return;
+        this.currentEmail = dataEmail;
+
+        const OrderSearchData = {
+            status: cache.orderStatusMap.get(cache.getKeyOrderStatusValidated()),
+            email: this.currentEmail
+        };
+
+        OrderService.postOrderSearchByEmail(OrderSearchData).then(response => {
+            if(response.ok) {
+                this.fnDisplayOrders(response.orders);
             }
             else{
                 const messages = Array.from(response.messages);

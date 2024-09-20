@@ -101,6 +101,8 @@ export class AppMenu {
             event.preventDefault();
             event.stopPropagation();
             this.resetLinkActive();
+            event.target.href = "/work-space";
+            window.route(event);
         });
 
         this.userSpaceLink.addEventListener("click", event => {

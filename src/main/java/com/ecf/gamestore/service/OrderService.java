@@ -1,7 +1,7 @@
 package com.ecf.gamestore.service;
 
-import com.ecf.gamestore.dto.OrderRequest;
-import com.ecf.gamestore.dto.OrderResponse;
+import com.ecf.gamestore.dto.*;
+import com.ecf.gamestore.mapper.OrderMapper;
 import com.ecf.gamestore.models.*;
 import com.ecf.gamestore.models.enumerations.OrderStatus;
 import com.ecf.gamestore.repository.OrderRepository;
@@ -180,5 +180,65 @@ public class OrderService extends AbstractService<OrderRepository, Order>{
         if(Objects.isNull(user)) return null;
 
         return this.repository.findOrdersByUser(user);
+    }
+
+    public OrderSearchResponse searchOrders(OrderSearchRequest request, OrderSearchResponse response) {
+        LOG.debug("## searchOrders(OrderSearchRequest request, OrderSearchResponse response)");
+
+        if(Objects.isNull(request)) {
+            throw new IllegalArgumentException("OrderSearchRequest ne doit pas être null");
+        }
+
+        if(Objects.isNull(response)) {
+            throw new IllegalArgumentException("OrderSearchResponse ne doit pas être null");
+        }
+
+        Set<ConstraintViolation<OrderSearchRequest>> violations = this.validator.validate(request);
+        if(!violations.isEmpty()) {
+            for(ConstraintViolation<OrderSearchRequest> violation : violations) {
+                response.addMessage(violation.getMessage());
+            }
+            return response;
+        }
+
+        GSUser user = this.gsUserService.getByEmail(request.getEmail());
+        if(Objects.isNull(user)) {
+            response.addMessage("Cet email n'existe pas");
+            return response;
+        }
+
+        List<Order> orders = this.repository.findOrdersByUserAndStatusOrderByPickupDateDesc(user, request.getStatus());
+        if(CollectionUtils.isNullOrEmpty(orders)) response.setOrders(List.of());
+        else response.setOrders(OrderMapper.toDTOs(orders));
+
+        response.setOk(true);
+        return response;
+    }
+
+    public OrderSearchResponse changeStatusToDelivered(String orderUuid, OrderSearchResponse response) {
+        LOG.debug("## searchOrders(OrderSearchRequest request, OrderSearchResponse response)");
+
+        if(!StringUtils.hasText(orderUuid)) {
+            throw new IllegalArgumentException("orderUuid ne doit pas être null ou empty");
+        }
+
+        if(Objects.isNull(response)) {
+            throw new IllegalArgumentException("OrderSearchResponse ne doit pas être null");
+        }
+
+        Order order = this.findByUuid(orderUuid);
+        if(Objects.isNull(order)) {
+            response.addMessage("La commande est introuvable");
+            return response;
+        }
+
+        order.setStatus(OrderStatus.DELIVERED);
+        this.save(order);
+
+        OrderSearchRequest request = new OrderSearchRequest();
+        request.setStatus(OrderStatus.VALIDATED);
+        request.setEmail(order.getUser().getEmail());
+
+        return this.searchOrders(request, response);
     }
 }

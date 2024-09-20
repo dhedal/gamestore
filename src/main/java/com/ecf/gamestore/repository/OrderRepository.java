@@ -2,6 +2,7 @@ package com.ecf.gamestore.repository;
 
 import com.ecf.gamestore.models.GSUser;
 import com.ecf.gamestore.models.Order;
+import com.ecf.gamestore.models.enumerations.OrderStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +17,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     public List<Order> findOrdersByCreatedAtGreaterThanEqual(LocalDateTime createdAt);
 
     public List<Order> findOrdersByUser(GSUser user);
+
+    public List<Order> findOrdersByUserAndStatusOrderByPickupDateDesc(GSUser user, OrderStatus status);
 }

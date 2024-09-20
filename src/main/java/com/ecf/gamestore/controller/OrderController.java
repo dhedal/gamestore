@@ -1,14 +1,12 @@
 package com.ecf.gamestore.controller;
 
-import com.ecf.gamestore.dto.HomePageDataDTO;
-import com.ecf.gamestore.dto.OrderDTO;
-import com.ecf.gamestore.dto.OrderRequest;
-import com.ecf.gamestore.dto.OrderResponse;
+import com.ecf.gamestore.dto.*;
 import com.ecf.gamestore.mapper.HomePageDataMapper;
 import com.ecf.gamestore.mapper.OrderMapper;
 import com.ecf.gamestore.models.HomePageData;
 import com.ecf.gamestore.models.Order;
 import com.ecf.gamestore.models.OrderLine;
+import com.ecf.gamestore.models.enumerations.OrderStatus;
 import com.ecf.gamestore.service.GSUserService;
 import com.ecf.gamestore.service.OrderService;
 import com.ecf.gamestore.utils.CollectionUtils;
@@ -89,5 +87,32 @@ public class OrderController {
             LOG.error(e.toString());
         }
         return ResponseEntity.ok(List.of());
+    }
+
+    @PostMapping(path="/search/email", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<OrderSearchResponse> searchOrderByEmail (@RequestBody OrderSearchRequest request) {
+        LOG.debug("## searchByEmail (OrderSearchRequest request)");
+        OrderSearchResponse response = new OrderSearchResponse();
+        try {
+            response = this.orderService.searchOrders(request, response);
+        }catch (Exception e) {
+            LOG.error(e.toString());
+            response.addMessage("Un problème est survenu, veuillez réessayer ultérieurement");
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(path="/status-delivered/{orderUuid}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<OrderSearchResponse> changeStatusToDelivered(@PathVariable String orderUuid) {
+        LOG.debug("## changeStatusToDelivered(String orderUuid)");
+        OrderSearchResponse response = new OrderSearchResponse();
+        try {
+            response = this.orderService.changeStatusToDelivered(orderUuid, response);
+
+        } catch (Exception e) {
+            LOG.error(e.toString());
+            response.addMessage("Un problème est survenu, veuillez contacter l'admin");
+        }
+        return ResponseEntity.ok(response);
     }
 }

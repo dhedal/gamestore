@@ -1,0 +1,134 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-12 d-flex align-items-start">
+            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <button class="nav-link active" id="order-tab" data-bs-toggle="pill" data-bs-target="#order-pane" type="button" role="tab" aria-controls="order-pane" aria-selected="true">
+                    Commandes
+                </button>
+                <button class="nav-link" id="sale-tab" data-bs-toggle="pill" data-bs-target="#sale-pane" type="button" role="tab" aria-controls="sale-pane" aria-selected="false">
+                    Ventes
+                </button>
+                <hr>
+                <button class="nav-link" id="member-tab" data-bs-toggle="pill" data-bs-target="#member-pane" type="button" role="tab" aria-controls="member-pane" aria-selected="false">
+                    Ajouter un membre
+                </button>
+                <button class="nav-link" id="game-tab" data-bs-toggle="pill" data-bs-target="#game-pane" type="button" role="tab" aria-controls="game-pane" aria-selected="false">
+                    Nouveau Jeux
+                </button>
+            </div>
+
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-12">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="order-pane" role="tabpanel" aria-labelledby="order-tab" tabindex="0">
+                    <form id="order-search-form" class="row mt-5 mb-5">
+                        <div class="col-12 mb-3">
+                            <span class="mb-3 fw-bold">Rechercher une commande par email</span>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-4 form-floating" >
+                                <input type="email" class="form-control" id="order-search-email" >
+                                <label for="order-search-email">Taper entrer pour rechercher</label>
+                            </div>
+                            <button id="order-search-submit" class="btn btn-outline-primary visually-hidden">Rechercher</button>
+                        </div>
+                    </form>
+                    <div id="order-container" class="row"></div>
+                </div>
+
+
+                <div class="tab-pane fade" id="sale-pane" role="tabpanel" aria-labelledby="sale-tab" tabindex="0">
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <button id="detailsButton">Détails</button>
+                        </div>
+                        <div class="col-12"><canvas id="salesChart"></canvas></div>
+                        <div class="col-12">
+                            <table id="salesTable" style="display: none;">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Nom de l'Article</th>
+                                    <th>Nombre de Ventes</th>
+                                    <th>Prix Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Exemple de données -->
+                                <tr>
+                                    <td>2024-09-01</td>
+                                    <td>Article A</td>
+                                    <td>5</td>
+                                    <td>100 €</td>
+                                </tr>
+                                <tr>
+                                    <td>2024-09-02</td>
+                                    <td>Article B</td>
+                                    <td>8</td>
+                                    <td>160 €</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="member-pane" role="tabpanel" aria-labelledby="member-tab" tabindex="0">
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="input-group mb-3">
+                                <div class="input-group-text">
+                                    <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
+                                </div>
+                                <span class="input-group-text">Modififier mes informations</span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="mb-4">Nom et prénom</h6>
+                            <div class="mb-4 form-floating" >
+                                <input type="text" class="form-control" id="modif-first-name" required>
+                                <label for="modif-first-name">Prénom</label>
+                            </div>
+                            <div class="mb-5 form-floating" >
+                                <input type="text" class="form-control" id="modif-last-name" required>
+                                <label for="modif-last-name">Nom</label>
+                            </div>
+                            <h6 class="mb-4">Votre adresse</h6>
+                            <div class="mb-4 form-floating" >
+                                <input type="text" class="form-control" id="modif-street-address" required>
+                                <label for="modif-street-address">Numéro et nom de la voie</label>
+                            </div>
+                            <div class="mb-4 form-floating" >
+                                <input type="number" class="form-control" id="modif-zip-code" required>
+                                <label for="modif-zip-code">Code postal</label>
+                            </div>
+                            <div class="mb-4 form-floating" >
+                                <input type="text" class="form-control" id="modif-city" required>
+                                <label for="modif-city">Ville</label>
+                            </div>
+                            <div class="mb-4 form-floating" >
+                                <input type="text" class="form-control" id="modif-country" required>
+                                <label for="modif-country">Pays</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button id="modif-submit" class="btn btn-outline-primary mb-3">Modifier</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                <div class="tab-pane fade" id="game-pane" role="tabpanel" aria-labelledby="game-tab" tabindex="0"> nouveau jeux</div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>
