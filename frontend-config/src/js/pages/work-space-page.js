@@ -1,5 +1,5 @@
 import {PageComponent} from "../components/page-component.js";
-import {OrderSearchForm} from "../forms/forms.js";
+import {MemberForm, OrderSearchForm} from "../forms/forms.js";
 import {OrderTemplate} from "../templates/templates.js";
 import {cache} from "../config/cache.js";
 import {OrderService} from "../services/order-service";
@@ -9,6 +9,7 @@ export class WorkSpacePage extends PageComponent {
     orderContainer;
     orderSearchForm;
     orderTemplate;
+    memberForm;
     constructor() {
         super("/work-space", "L'équipe", "/html/work-space.html", []);
     }
@@ -20,7 +21,7 @@ export class WorkSpacePage extends PageComponent {
             const orderUuid = event.detail.order;
             OrderService.fetchOrderDelivered(orderUuid).then(response => {
                 if(response.ok) {
-                    MessageUtils.success("La livraison de la commande a bien été validée.")
+                    MessageUtils.success("La livraison de la commande a bien été validée.");
                     this.fillOrders(response.orders);
                 }
                 else{
@@ -35,6 +36,8 @@ export class WorkSpacePage extends PageComponent {
         this.orderSearchForm = new OrderSearchForm(this.fillOrders.bind(this));
         this.orderTemplate = new OrderTemplate();
         this.orderTemplate.isTeam = true;
+
+        this.memberForm = new MemberForm();
     }
 
     async ready() {

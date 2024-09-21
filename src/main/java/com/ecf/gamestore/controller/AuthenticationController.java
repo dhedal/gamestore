@@ -52,6 +52,19 @@ public class AuthenticationController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping(value = "/create-member", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<SignupResponse> createMember(@RequestBody SignupRequest request) {
+        LOG.debug("## createMember(SignupRequest request)");
+        final SignupResponse response = new SignupResponse();
+        try {
+            this.authenticationService.createMember(request, response);
+        } catch (Exception e){
+            LOG.error(e.toString());
+            response.addMessage("Un problème est survenu, veuillez réessayer ultérieurement");
+        }
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping(value = "/change-password", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SigninResponse> changePassword(@RequestBody ChangePasswordRequest request) {
         LOG.debug("## changePassword (ChangePasswordRequest request");

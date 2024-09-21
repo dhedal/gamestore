@@ -19,6 +19,13 @@ export class AuthenticationService {
         return await response.json();
     }
 
+    static postCreateMember = async (memberData) => {
+        const parameters = AuthenticationService.httpHeader("POST");
+        parameters.body = JSON.stringify(memberData);
+        const response = await fetch(`${API_AUTH_URL}/create-member`, parameters);
+        return await response.json();
+    }
+
     static postSignin = async (requestData) => {
         const parameters = AuthenticationService.httpHeader("POST");
         parameters.body = JSON.stringify(requestData);

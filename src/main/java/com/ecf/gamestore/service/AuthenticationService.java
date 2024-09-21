@@ -4,6 +4,7 @@ import com.ecf.gamestore.dto.*;
 import com.ecf.gamestore.mapper.GSUserMapper;
 import com.ecf.gamestore.models.GSUser;
 import com.ecf.gamestore.models.embeddables.Address;
+import com.ecf.gamestore.models.enumerations.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +84,7 @@ public class AuthenticationService {
         return response;
     }
 
+
     /**
      *
      * @param request
@@ -123,6 +125,46 @@ public class AuthenticationService {
         }
 
         return response;
+    }
+
+
+    public SignupResponse createMember(SignupRequest request, SignupResponse response) {
+        LOG.debug("## createMember(SignupRequest request, SignupResponse response)");
+        if(Objects.isNull(request)){
+            throw new IllegalArgumentException("SignupRequest ne doit pas être null");
+        }
+        if(Objects.isNull(response)){
+            throw new IllegalArgumentException("SignupResponse ne doit pas être null");
+        }
+
+        Set<ConstraintViolation<SignupRequest>> violations = this.validator.validate(request);
+        if(!violations.isEmpty()) {
+            for(ConstraintViolation<SignupRequest> violation : violations) {
+                response.addMessage(violation.getMessage());
+            }
+            return response;
+        }
+
+
+        if(!Objects.equals(request.getRole(), Role.ADMIN.getKey())) request.setRole(Role.EMPLOYEE.getKey());
+
+        boolean run = true;
+        String emailStart = "%s-%s@%s".formatted(
+                request.getFirstName().toLowerCase().trim(),
+                request.getLastName().toLowerCase().trim(),
+                Role.getByKey(request.getRole()).name().toLowerCase().trim()
+        );
+        String emailEnd = ".gs.com";
+        String email = "%s%s".formatted(emailStart,emailEnd);
+        for(int i = 0; run; i++) {
+            if(i > 0) {
+                email = "%s-%s%s".formatted(emailStart, String.valueOf(i), emailEnd);
+            }
+            run = this.gsUserService.isEmailExist(email);
+        }
+        request.setEmail(email);
+
+        return this.save(request, response);
     }
 
     public SigninResponse changePassword(ChangePasswordRequest request, SigninResponse response) {
@@ -194,5 +236,6 @@ public class AuthenticationService {
             return false;
         }
     }
+
 
 }

@@ -74,47 +74,52 @@
                 </div>
 
                 <div class="tab-pane fade" id="member-pane" role="tabpanel" aria-labelledby="member-tab" tabindex="0">
-                    <div class="row mt-5">
+                    <form id="member-form" class="row mt-5">
                         <div class="col-12">
-                            <div class="input-group mb-3">
-                                <div class="input-group-text">
-                                    <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
-                                </div>
-                                <span class="input-group-text">Modififier mes informations</span>
-                            </div>
+                            <p class="mb-4 fw-bold">Ajouter un nouveau membre</p>
                         </div>
                         <div class="col-12">
                             <h6 class="mb-4">Nom et prénom</h6>
                             <div class="mb-4 form-floating" >
-                                <input type="text" class="form-control" id="modif-first-name" required>
-                                <label for="modif-first-name">Prénom</label>
+                                <input type="text" class="form-control" id="member-first-name" required>
+                                <label for="member-first-name">Prénom</label>
                             </div>
                             <div class="mb-5 form-floating" >
-                                <input type="text" class="form-control" id="modif-last-name" required>
-                                <label for="modif-last-name">Nom</label>
+                                <input type="text" class="form-control" id="member-last-name" required>
+                                <label for="member-last-name">Nom</label>
                             </div>
-                            <h6 class="mb-4">Votre adresse</h6>
+                            <h6 class="mb-4">L'adresse</h6>
                             <div class="mb-4 form-floating" >
-                                <input type="text" class="form-control" id="modif-street-address" required>
-                                <label for="modif-street-address">Numéro et nom de la voie</label>
-                            </div>
-                            <div class="mb-4 form-floating" >
-                                <input type="number" class="form-control" id="modif-zip-code" required>
-                                <label for="modif-zip-code">Code postal</label>
+                                <input type="text" class="form-control" id="member-street-address" required>
+                                <label for="member-street-address">Numéro et nom de la voie</label>
                             </div>
                             <div class="mb-4 form-floating" >
-                                <input type="text" class="form-control" id="modif-city" required>
-                                <label for="modif-city">Ville</label>
+                                <input type="number" class="form-control" id="member-zip-code" required>
+                                <label for="member-zip-code">Code postal</label>
                             </div>
                             <div class="mb-4 form-floating" >
-                                <input type="text" class="form-control" id="modif-country" required>
-                                <label for="modif-country">Pays</label>
+                                <input type="text" class="form-control" id="member-city" required>
+                                <label for="member-city">Ville</label>
+                            </div>
+                            <div class="mb-4 form-floating" >
+                                <input type="text" class="form-control" id="member-country" required>
+                                <label for="member-country">Pays</label>
                             </div>
                         </div>
+                        <h6 class="mb-4">Le status</h6>
+                        <div class="form-floating">
+                            <select class="mb-4 form-select" id="member-status" >
+                                <option value="0" selected>. . .</option>
+                                <option value="2">Employé</option>
+                                <option value="3">Admin</option>
+                            </select>
+                            <label for="member-status">Choisir le status du membre</label>
+                        </div>
+
                         <div class="col-12">
-                            <button id="modif-submit" class="btn btn-outline-primary mb-3">Modifier</button>
+                            <button id="member-submit" class="btn btn-outline-primary mb-3">Enregistrer</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
 
 

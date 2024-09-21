@@ -11,6 +11,10 @@ import {cache} from "../config/cache.js";
 
 class Validator {
 
+    static validateSelect = (selected) => {
+        return selected.value !== "0";
+    }
+
     static validateInputRequired = (input) => {
         return input.required && input.value !== "";
     }
@@ -41,6 +45,17 @@ class Validator {
 
     static validateStringContainsSpecialCharacters(string = "", pattern = /[!@#$%&*?:+-]/){
         return pattern.test(string);
+    }
+
+    static validateOptionSelected(inputKey, select){
+        if(Validator.validateSelect(select)) {
+            select.classList.add("is-valid");
+            select.classList.remove("is-invalid");
+            return true;
+        }
+        select.classList.add("is-invalid");
+        select.classList.remove("is-valid");
+        return false;
     }
 
     static validateInputNotEmpty(inputKey, input) {
@@ -170,6 +185,7 @@ class Form {
         this._inputArray.forEach(([elementKey, element]) => {
             this._clearValidOrInvalidCSS(element);
             if(element.tagName === "INPUT") element.value = "";
+            else if(element.tagName === "SELECT") element.selectedIndex = 0;
             else element.textContent = "";
         });
     }
@@ -805,6 +821,62 @@ export class OrderSearchForm extends Form {
         OrderService.postOrderSearchByEmail(OrderSearchData).then(response => {
             if(response.ok) {
                 this.fnDisplayOrders(response.orders);
+            }
+            else{
+                const messages = Array.from(response.messages);
+                messages.forEach(message => {
+                    MessageUtils.danger(message);
+                });
+            }
+        });
+
+    }
+}
+
+
+export class MemberForm extends Form {
+    firstName;
+    lastName;
+    streetAddress;
+    zipCode;
+    city;
+    country;
+    status;
+
+    constructor(formElement = "member-form") {
+        super(formElement, "member-submit");
+
+        this.firstName = this._addInputs("member-first-name", "keyup", Validator.validateInputNotEmpty);
+        this.lastName = this._addInputs("member-last-name", "keyup", Validator.validateInputNotEmpty);
+        this.streetAddress = this._addInputs("member-street-address", "keyup", Validator.validateInputNotEmpty);
+        this.zipCode = this._addInputs("member-zip-code", "keyup", Validator.validateZipCode);
+        this.city = this._addInputs("member-city", "keyup", Validator.validateInputNotEmpty);
+        this.country = this._addInputs("member-country", "keyup", Validator.validateInputNotEmpty);
+        this.status = this._addInputs("member-status", "change", Validator.validateOptionSelected);
+    }
+
+    async send(data) {
+        if(!data) return;
+
+        const memberData = {
+            firstName: data.get(this.firstName),
+            lastName: data.get(this.lastName),
+            streetAddress: data.get(this.streetAddress),
+            zipCode: data.get(this.zipCode),
+            city: data.get(this.city),
+            country: data.get(this.country),
+            role: data.get(this.status),
+            email: "fake@fake.gs",
+            password: "FK++2fake++3"
+        };
+
+        AuthenticationService.postCreateMember(memberData).then(response => {
+            if(response.ok) {
+                this.clear();
+                MessageUtils.success("Le nouveau membre a bien été enregistré");
+                if(response.emailSent) {
+                    MessageUtils.success("Un email de confirmation lui a été envoyé");
+                }
             }
             else{
                 const messages = Array.from(response.messages);
